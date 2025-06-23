@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,47 +13,64 @@ import {
   Shield,
   Building,
 } from "lucide-react";
-
-const steps = ["Personal Info", "Membership Info", "Account Info"];
-import { type FormData } from "@/types/form.types";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { DotBackground } from "@/components/ui/dot-background";
 
+const steps = ["Personal Info", "Membership Info", "Account Info"];
+
+const registrationSchema = z.object({
+  fullName: z.string().min(2, "Full name is required"),
+  email: z.string().email("Enter a valid email address"),
+  phone: z.string().min(8, "Enter a valid phone number"),
+  gender: z.enum(["male", "female", "other"], {
+    required_error: "Gender is required",
+  }),
+  isMember: z.boolean(),
+  membershipId: z.string().optional(),
+  idCard: z.any().refine((file) => file instanceof File || file === null, {
+    message: "ID Card is required",
+  }),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  institution: z.string().min(2, "Institution is required"),
+  designation: z.string().min(2, "Designation is required"),
+});
+
+type RegistrationForm = z.infer<typeof registrationSchema>;
+
 export default function RegisterPage() {
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState<FormData>({
-    fullName: "",
-    email: "",
-    phone: "",
-    gender: "",
-    isMember: false,
-    membershipId: "",
-    idCard: null as File | null,
-    password: "",
-    institution: "",
-    designation: "",
+  const [step, setStep] = React.useState(0);
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<RegistrationForm>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+      gender: "male",
+      isMember: false,
+      membershipId: "",
+      idCard: null,
+      password: "",
+      institution: "",
+      designation: "",
+    },
+    mode: "onTouched",
   });
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) {
-    const { name, value, type, checked, files } = e.target as any;
-    setForm((prev) => ({
-      ...prev,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files?.[0] : value,
-    }));
-  }
+  const isMember = watch("isMember");
+  const idCard = watch("idCard");
 
-  function nextStep() {
-    setStep((s) => Math.min(s + 1, steps.length - 1));
-  }
-  function prevStep() {
-    setStep((s) => Math.max(s - 1, 0));
-  }
-  function handleSubmit(e: React.MouseEvent) {
-    e.preventDefault();
+  function onSubmit(data: RegistrationForm) {
     // TODO: Submit form logic
-    alert("Registration submitted!");
+    alert("Registration submitted!\n" + JSON.stringify(data, null, 2));
   }
 
   const getStepIcon = (stepIndex: number) => {
@@ -69,16 +86,25 @@ export default function RegisterPage() {
     }
   };
 
+  // Step navigation logic
+  function nextStep() {
+    setStep((s) => Math.min(s + 1, steps.length - 1));
+  }
+  function prevStep() {
+    setStep((s) => Math.max(s - 1, 0));
+  }
+
   return (
     <DotBackground>
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden w-full">
         <div className="relative z-10">
           {/* Main container */}
-          <div className="bg-neutral-900 rounded-3xl shadow-2xl p-8 relative border border-neutral-800">
+          <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl p-8 relative border border-neutral-200 dark:border-neutral-800 md:w-[400px] transition-colors duration-300">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2">Register</h1>
+              <h1 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
+                Register
+              </h1>
             </div>
 
             {/* Progress indicator */}
@@ -89,10 +115,10 @@ export default function RegisterPage() {
                     key={label}
                     className="flex flex-col items-center relative flex-1">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10 border-2 ${
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10 border-2 shadow-md ${
                         i <= step
-                          ? "bg-blue-800 text-white border-blue-500 shadow-lg shadow-blue-900"
-                          : "bg-neutral-800 text-neutral-500 border-neutral-700"
+                          ? "bg-blue-600 dark:bg-blue-700 text-white border-blue-500 dark:border-blue-400 shadow-blue-100 dark:shadow-blue-900"
+                          : "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 border-neutral-300 dark:border-neutral-700"
                       }`}>
                       {i < step ? (
                         <Check className="w-5 h-5" />
@@ -101,15 +127,17 @@ export default function RegisterPage() {
                       )}
                     </div>
                     <span
-                      className={`text-xs mt-2 font-medium ${
-                        i <= step ? "text-blue-300" : "text-neutral-500"
+                      className={`text-xs mt-2 font-semibold tracking-wide ${
+                        i <= step
+                          ? "text-blue-700 dark:text-blue-300"
+                          : "text-neutral-400 dark:text-neutral-500"
                       }`}>
                       {label}
                     </span>
                     {i < steps.length - 1 && (
-                      <div className="absolute top-5 left-1/2 w-full h-0.5 bg-neutral-800 -z-10">
+                      <div className="absolute top-5 left-1/2 w-full h-0.5 bg-neutral-200 dark:bg-neutral-800 -z-10">
                         <div
-                          className={`h-full bg-blue-800 transition-all duration-500 ${
+                          className={`h-full bg-blue-200 dark:bg-blue-800 transition-all duration-500 rounded-full ${
                             i < step ? "w-full" : "w-0"
                           }`}
                         />
@@ -120,186 +148,196 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Form content */}
-            <div className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {step === 0 && (
                 <div className="space-y-5 animate-in slide-in-from-right duration-300">
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Full Name *
                     </label>
                     <div className="relative">
                       <Input
-                        name="fullName"
-                        value={form.fullName}
-                        onChange={handleChange}
+                        {...register("fullName")}
                         placeholder="Enter your full name"
-                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
                         required
                       />
-                      <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-300 w-5 h-5" />
+                      <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-300 w-5 h-5" />
                     </div>
+                    {errors.fullName && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.fullName.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Email Address *
                     </label>
                     <div className="relative">
                       <Input
-                        name="email"
+                        {...register("email")}
                         type="email"
-                        value={form.email}
-                        onChange={handleChange}
                         placeholder="Enter your email"
-                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
                         required
                       />
-                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-300 w-5 h-5" />
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-300 w-5 h-5" />
                     </div>
+                    {errors.email && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Phone Number *
                     </label>
                     <div className="relative">
                       <Input
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
+                        {...register("phone")}
                         placeholder="Enter your phone number"
-                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
                         required
                       />
-                      <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-300 w-5 h-5" />
+                      <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-300 w-5 h-5" />
                     </div>
+                    {errors.phone && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.phone.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Gender *
                     </label>
                     <select
-                      name="gender"
-                      value={form.gender}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                      {...register("gender")}
+                      className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
                       required>
                       <option value="">Select your gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                       <option value="other">Other</option>
                     </select>
+                    {errors.gender && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.gender.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
 
               {step === 1 && (
                 <div className="space-y-6 animate-in slide-in-from-right duration-300">
-                  <div className="bg-blue-950/30 border border-blue-900 rounded-xl p-6">
+                  <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900 rounded-xl p-6 transition-colors duration-300">
                     <div className="flex items-center space-x-3">
                       <div className="relative">
                         <input
                           type="checkbox"
-                          name="isMember"
-                          checked={form.isMember}
-                          onChange={handleChange}
-                          style={{ display: "none" }}
                           id="isMember"
+                          {...register("isMember")}
+                          className="hidden"
                         />
                         <div
-                          onClick={() =>
-                            handleChange({
-                              target: {
-                                name: "isMember",
-                                type: "checkbox",
-                                checked: !form.isMember,
-                              },
-                            } as any)
-                          }
-                          className={`w-5 h-5 border-2 rounded cursor-pointer transition-all duration-200 ${
-                            form.isMember
-                              ? "bg-blue-800 border-blue-500"
-                              : "border-neutral-700 bg-neutral-900 hover:border-blue-700"
+                          onClick={() => setValue("isMember", !isMember)}
+                          className={`w-5 h-5 border-2 rounded cursor-pointer transition-all duration-200 flex items-center justify-center ${
+                            isMember
+                              ? "bg-blue-600 dark:bg-blue-700 border-blue-500 dark:border-blue-400"
+                              : "border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:border-blue-400 dark:hover:border-blue-700"
                           }`}>
-                          {form.isMember && (
-                            <Check className="w-3 h-3 text-blue-200 m-0.5" />
+                          {isMember && (
+                            <Check className="w-3 h-3 text-blue-700 dark:text-blue-200 m-0.5" />
                           )}
                         </div>
                       </div>
                       <label
-                        className="text-blue-100 font-medium cursor-pointer"
-                        onClick={() =>
-                          handleChange({
-                            target: {
-                              name: "isMember",
-                              type: "checkbox",
-                              checked: !form.isMember,
-                            },
-                          } as any)
-                        }>
+                        className="text-neutral-800 dark:text-blue-100 font-medium cursor-pointer"
+                        htmlFor="isMember">
                         I am an IEEE CS Chapter Member
                       </label>
                     </div>
                   </div>
 
-                  {form.isMember && (
+                  {isMember && (
                     <div className="animate-in slide-in-from-top duration-300">
-                      <label className="block text-sm font-semibold text-blue-100 mb-2">
+                      <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                         IEEE Membership ID *
                       </label>
                       <Input
-                        name="membershipId"
-                        value={form.membershipId}
-                        onChange={handleChange}
+                        {...register("membershipId", { required: isMember })}
                         placeholder="Enter your IEEE membership ID"
-                        className="w-full px-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
-                        required={form.isMember}
+                        className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
+                        required={isMember}
                       />
+                      {errors.membershipId && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.membershipId.message}
+                        </p>
+                      )}
                     </div>
                   )}
 
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Upload ID Card *
                     </label>
-                    <div className="relative border-2 border-dashed border-neutral-700 rounded-xl p-6 text-center hover:border-blue-700 transition-colors duration-200 cursor-pointer group bg-neutral-800">
-                      <input
-                        type="file"
-                        name="idCard"
-                        accept="image/*,application/pdf"
-                        onChange={handleChange}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        required
-                      />
-                      <div className="space-y-2">
-                        <div className="w-12 h-12 mx-auto bg-neutral-900 rounded-full flex items-center justify-center group-hover:bg-blue-950 transition-colors duration-200">
-                          <svg
-                            className="w-6 h-6 text-blue-300 group-hover:text-blue-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                            />
-                          </svg>
+                    <Controller
+                      control={control}
+                      name="idCard"
+                      render={({ field: { onChange } }) => (
+                        <div className="relative border-2 border-dashed border-neutral-200 dark:border-neutral-700 rounded-xl p-6 text-center hover:border-blue-400 dark:hover:border-blue-700 transition-colors duration-200 cursor-pointer group bg-white dark:bg-neutral-800">
+                          <input
+                            type="file"
+                            accept="image/*,application/pdf"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0] || null;
+                              onChange(file);
+                            }}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            required
+                          />
+                          <div className="space-y-2">
+                            <div className="w-12 h-12 mx-auto bg-neutral-100 dark:bg-neutral-900 rounded-full flex items-center justify-center group-hover:bg-blue-50 dark:group-hover:bg-blue-950 transition-colors duration-200">
+                              <svg
+                                className="w-6 h-6 text-blue-500 dark:text-blue-300 group-hover:text-blue-700 dark:group-hover:text-blue-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-neutral-800 dark:text-blue-100 font-medium">
+                                {idCard
+                                  ? idCard.name
+                                  : "Choose file or drag & drop"}
+                              </p>
+                              <p className="text-blue-700 dark:text-blue-300 text-sm">
+                                PNG, JPG or PDF (max 5MB)
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-blue-100 font-medium">
-                            {form.idCard
-                              ? form.idCard.name
-                              : "Choose file or drag & drop"}
-                          </p>
-                          <p className="text-blue-300 text-sm">
-                            PNG, JPG or PDF (max 5MB)
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                      )}
+                    />
+                    {errors.idCard &&
+                      typeof errors.idCard.message === "string" && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.idCard.message}
+                        </p>
+                      )}
                   </div>
                 </div>
               )}
@@ -307,94 +345,110 @@ export default function RegisterPage() {
               {step === 2 && (
                 <div className="space-y-5 animate-in slide-in-from-right duration-300">
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Password *
                     </label>
                     <div className="relative">
                       <Input
-                        name="password"
+                        {...register("password")}
                         type="password"
-                        value={form.password}
-                        onChange={handleChange}
                         placeholder="Create a strong password"
-                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
                         required
                       />
-                      <Shield className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-300 w-5 h-5" />
+                      <Shield className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-300 w-5 h-5" />
                     </div>
-                    <p className="text-xs text-blue-300 mt-1">
+                    {errors.password && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.password.message}
+                      </p>
+                    )}
+                    <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
                       Minimum 8 characters recommended
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Institution/Company *
                     </label>
                     <div className="relative">
                       <Input
-                        name="institution"
-                        value={form.institution}
-                        onChange={handleChange}
+                        {...register("institution")}
                         placeholder="Your institution or company"
-                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                        className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
                         required
                       />
-                      <Building className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-300 w-5 h-5" />
+                      <Building className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-300 w-5 h-5" />
                     </div>
+                    {errors.institution && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.institution.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-blue-100 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Designation *
                     </label>
                     <Input
-                      name="designation"
-                      value={form.designation}
-                      onChange={handleChange}
+                      {...register("designation")}
                       placeholder="Your role or designation"
-                      className="w-full px-4 py-3 border-2 border-neutral-800 bg-neutral-800 text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:outline-none transition-colors duration-200"
+                      className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
                       required
                     />
+                    {errors.designation && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.designation.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
-            </div>
 
-            {/* Navigation buttons */}
-            <div className="flex justify-between items-center pt-8 mt-8 border-t border-neutral-800">
-              {step > 0 ? (
-                <Button className="flex items-center space-x-2 px-6 py-3 text-blue-200 bg-neutral-800 hover:bg-neutral-700 rounded-xl transition-all duration-200 font-medium border border-neutral-700">
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Back</span>
-                </Button>
-              ) : (
-                <div></div>
-              )}
+              {/* Navigation buttons */}
+              <div className="flex justify-between items-center pt-8 mt-8 border-t border-neutral-200 dark:border-neutral-800">
+                {step > 0 ? (
+                  <Button
+                    type="button"
+                    onClick={prevStep}
+                    className="flex items-center space-x-2 px-6 py-3 text-blue-700 dark:text-blue-200 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-xl transition-all duration-200 font-medium border border-neutral-200 dark:border-neutral-700 shadow-sm">
+                    <ChevronLeft className="w-4 h-4" />
+                    <span>Back</span>
+                  </Button>
+                ) : (
+                  <div></div>
+                )}
 
-              {step < steps.length - 1 ? (
-                <Button className="flex items-center space-x-2 px-8 py-3 bg-blue-800 hover:bg-blue-700 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-blue-900 hover:shadow-xl hover:shadow-blue-800 border border-blue-900">
-                  <span>Next</span>
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSubmit}
-                  className="flex items-center space-x-2 px-8 py-3 bg-green-800 hover:bg-green-700 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-green-900 hover:shadow-xl hover:shadow-green-800 border border-green-900">
-                  <Check className="w-4 h-4" />
-                  <span>Complete Registration</span>
-                </Button>
-              )}
-            </div>
+                {step < steps.length - 1 ? (
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="flex items-center space-x-2 px-8 py-3 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-blue-100 dark:shadow-blue-900 hover:shadow-xl hover:shadow-blue-200 dark:hover:shadow-blue-800 border border-blue-500 dark:border-blue-400">
+                    <span>Next</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex items-center space-x-2 px-8 py-3 bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-green-100 dark:shadow-green-900 hover:shadow-xl hover:shadow-green-200 dark:hover:shadow-green-800 border border-green-500 dark:border-green-400">
+                    <Check className="w-4 h-4" />
+                    <span>Complete Registration</span>
+                  </Button>
+                )}
+              </div>
+            </form>
+
+            {/* Footer text */}
+            <p className="text-center text-blue-700/80 dark:text-blue-200/80 text-sm mt-6">
+              Already have an account?{" "}
+              <button className="text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-white font-medium underline">
+                Sign in
+              </button>
+            </p>
           </div>
-
-          {/* Footer text */}
-          <p className="text-center text-blue-200/80 text-sm mt-6">
-            Already have an account?{" "}
-            <button className="text-blue-300 hover:text-white font-medium underline">
-              Sign in
-            </button>
-          </p>
         </div>
       </div>
     </DotBackground>
