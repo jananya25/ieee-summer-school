@@ -1,5 +1,6 @@
 import HeroSection from "@/components/hero";
 import { About } from "@/components/about";
+import { Schedule } from "@/components/schedule";
 
 export default function HomePage() {
   return (
@@ -60,12 +61,7 @@ export default function HomePage() {
         </ul>
       </section>
 
-      <section id="schedule" className="py-12">
-        <h2 className="text-2xl font-bold mb-4 text-primary">Schedule</h2>
-        <div className="bg-white rounded-lg shadow hoverable p-6">
-          Full schedule coming soon.
-        </div>
-      </section>
+        <Schedule/>
 
       <section id="faq" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">FAQ</h2>
