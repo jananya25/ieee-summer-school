@@ -1,0 +1,70 @@
+"use client";
+
+import React, { useState } from "react";
+import { cn } from "@/lib/utils";
+
+type Card = {
+  title: string;
+  src: string;
+  designation?: string;
+};
+
+export const Card = React.memo(
+  ({
+    card,
+    index,
+    hovered,
+    setHovered,
+  }: {
+    card: Card;
+    index: number;
+    hovered: number | null;
+    setHovered: React.Dispatch<React.SetStateAction<number | null>>;
+  }) => (
+    <div
+      onMouseEnter={() => setHovered(index)}
+      onMouseLeave={() => setHovered(null)}
+      className={cn(
+        "rounded-xl relative overflow-hidden aspect-square w-full transition-all duration-300 ease-out shadow-md",
+        hovered !== null && hovered !== index && "scale-[0.98] opacity-80"
+      )}
+    >
+      <img
+        src={card.src}
+        alt={card.title}
+        className="object-cover absolute inset-0 w-full h-full"
+      />
+
+      <div className="absolute bottom-0 w-full px-4 py-4 bg-gradient-to-t from-white/20 to-white/10">
+        <div className="text-md md:text-lg font-semibold text-black drop-shadow">
+          {card.title}
+        </div>
+        {card.designation && (
+          <div className="text-sm md:text-base text-gray-700">
+            {card.designation}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+);
+
+Card.displayName = "Card";
+
+export function FocusCards({ cards }: { cards: Card[] }) {
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto md:px-8 w-full">
+      {cards.map((card, index) => (
+        <Card
+          key={card.title}
+          card={card}
+          index={index}
+          hovered={hovered}
+          setHovered={setHovered}
+        />
+      ))}
+    </div>
+  );
+}

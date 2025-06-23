@@ -2,6 +2,8 @@ import HeroSection from "@/components/hero";
 import RegistrationGuidelines from "@/components/registration-guidelines";
 import { About } from "@/components/about";
 import { Schedule } from "@/components/schedule";
+import { Speaker } from "lucide-react";
+import Speakers from "@/components/Speakers";
 
 export default function HomePage() {
   return (
@@ -37,10 +39,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="speakers" className="py-12">
+      {/* <section id="speakers" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">Speakers</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {/* Placeholder speaker cards */}
           <div className="bg-white rounded-lg shadow hoverable p-6 text-center">
             Speaker 1
           </div>
@@ -51,7 +52,8 @@ export default function HomePage() {
             Speaker 3
           </div>
         </div>
-      </section>
+      </section> */}
+      <Speakers/>
 
       {/* <section id="guidelines" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">Guidelines</h2>
