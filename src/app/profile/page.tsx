@@ -1,23 +1,24 @@
 "use client";
+import { use, useEffect, useState } from "react";
+import { getUserData } from "../../data/conference-schedule";
+import { UserProfile } from "@/components/user-profile";
+import { User } from "@/types/user";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-import { useSession, signOut } from "next-auth/react";
-import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
-  if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
+  useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+    if (!session) {
+      router.push("/api/auth/signin");
+    }
+  }, [session, status, router]);
 
-  if (!session) {
-    return <div className="min-h-screen flex items-center justify-center">Not signed in</div>;
-  }
-
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-      <h1 className="text-2xl font-bold">Welcome, {session.user?.email}</h1>
-      <Button onClick={() => signOut({ callbackUrl: "/login" })}>Sign Out</Button>
-    </div>
-  );
-} 
+  return session ? <UserProfile session={session} /> : <div>Loading...</div>;
+}
