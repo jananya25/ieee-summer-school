@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import connectDB from "@/lib/db";
+import dbConnect from "@/lib/db";
 import User from "@/models/user.model";
 import bcrypt from "bcryptjs";
 // Configure Cloudinary
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
   try {
 
     // Connect to MongoDB
-    await connectDB();
+    await dbConnect();
 
     // Extract form data
     const formData = await request.formData();
