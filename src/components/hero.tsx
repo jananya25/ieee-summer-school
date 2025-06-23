@@ -1,6 +1,7 @@
+'use client'
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { BackgroundBeams } from "./background-beams"
+import { BackgroundBeams } from "./ui/background-beams"
 
 export default function HeroSection() {
   const avatars = [
@@ -13,20 +14,23 @@ export default function HeroSection() {
     "/avatar.jpeg",
     "/avatar.jpeg",
   ]
+  
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-black">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-neutral-900">
       <div className="container px-4 md:px-6 mx-auto">
         <div className="flex flex-col items-center space-y-8 text-center">
           {/* Main Heading */}
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-gray-700 max-w-4xl">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-white max-w-4xl">
               IEEE Summer School  2025
             </h1>
-            <p className="mx-auto max-w-2xl text-lg text-gray-600 md:text-xl">
+            <p className="mx-auto max-w-2xl text-lg text-gray-400 md:text-xl">
               An intensive learning experience designed to enhance your technical skills and knowledge!
             </p>
-          </div>
+            </div>
+         
+
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
@@ -44,8 +48,8 @@ export default function HeroSection() {
 
           {/* Social Proof */}
           <div className="space-y-4 pt-8">
-            <p className="text-sm text-gray-500 font-medium">
-              COMING SOON..
+            <p className="text-3xl text-neutral-200 font-bold">
+              28th July - 1st August 2025
             </p>
 
             {/* Avatars */}
@@ -57,7 +61,7 @@ export default function HeroSection() {
                     alt={`User ${index + 1}`}
                     width={40}
                     height={40}
-                    className="rounded-full border-2 border-white shadow-sm"
+                    className="w-16 h-16 rounded-full border-2 border-white shadow-sm"
                   />
                 </div>
               ))}
