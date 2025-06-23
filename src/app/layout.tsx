@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import ClientRoot from "@/components/client-root";
 import SessionWrapper from "@/components/SessionWrapper";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Summer School 2025 - IEEE BVICAM",
@@ -19,7 +20,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased")}>
         <SessionWrapper>
-          <ClientRoot>{children}</ClientRoot>
+          <Toaster />
+        <ClientRoot>{children}</ClientRoot>
 
         </SessionWrapper>
         
