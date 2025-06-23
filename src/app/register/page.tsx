@@ -17,7 +17,8 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DotBackground } from "@/components/ui/dot-background";
-
+import axios from   "axios";
+import { toast } from "sonner";
 const steps = ["Personal Info", "Membership Info", "Account Info"];
 
 const registrationSchema = z.object({
@@ -68,9 +69,33 @@ export default function RegisterPage() {
   const isMember = watch("isMember");
   const idCard = watch("idCard");
 
-  function onSubmit(data: RegistrationForm) {
-    // TODO: Submit form logic
-    alert("Registration submitted!\n" + JSON.stringify(data, null, 2));
+  async function onSubmit(data: RegistrationForm) {
+    try {
+      const formData = new FormData();
+      formData.append("fullName", data.fullName);
+      formData.append("email", data.email);
+      formData.append("phone", data.phone);
+      formData.append("gender", data.gender);
+      formData.append("password", data.password);
+      formData.append("designation", data.designation);
+      formData.append("institutionCompany", data.institution);
+      if (data.isMember && data.membershipId) {
+        formData.append("ieeeMemberId", data.membershipId);
+      }
+      if (data.idCard) {
+        formData.append("idCard", data.idCard);
+      }
+
+      const response = await axios.post("/api/register", formData);
+      if (response.status === 201) {
+        toast.success("Registration successful");
+      } else {
+        toast.error("Registration failed");
+      }
+    } catch (error) {
+      toast.error("Registration failed");
+      console.error("Error during registration:", error);
+    }
   }
 
   const getStepIcon = (stepIndex: number) => {
@@ -425,7 +450,7 @@ export default function RegisterPage() {
                   <Button
                     type="button"
                     onClick={nextStep}
-                    className="flex items-center space-x-2 px-8 py-3 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-blue-100 dark:shadow-blue-900 hover:shadow-xl hover:shadow-blue-200 dark:hover:shadow-blue-800 border border-blue-500 dark:border-blue-400">
+                    className="flex items-center space-x-2 px-8 py-3 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-blue-100 dark:shadow-blue-900 hover:shadow-xl hover:shadow-blue-200 dark:hover:shadow-blue-800 border border-blue-500 dark:border-blue-400 z-50">
                     <span>Next</span>
                     <ChevronRight className="w-4 h-4" />
                   </Button>
