@@ -1,4 +1,5 @@
 import HeroSection from "@/components/hero";
+import RegistrationGuidelines from "@/components/registration-guidelines";
 import { About } from "@/components/about";
 import { Schedule } from "@/components/schedule";
 
@@ -52,14 +53,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="guidelines" className="py-12">
+      {/* <section id="guidelines" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">Guidelines</h2>
         <ul className="list-disc pl-6 text-foreground/80">
           <li>Follow the event code of conduct.</li>
           <li>Respect all participants and speakers.</li>
           <li>Participate actively in sessions and workshops.</li>
         </ul>
-      </section>
+      </section> */}
+      <RegistrationGuidelines/>
 
         <Schedule/>
 
