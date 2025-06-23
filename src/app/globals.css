@@ -47,13 +47,23 @@
 :root {
   --background: #f8fbff;
   --foreground: #0a2540;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --secondary: #e0f2fe;
-  --accent: #bae6fd;
+  --primary: #6366f1; /* Indigo-500 */
+  --primary-hover: #4f46e5; /* Indigo-600 */
+  --secondary: #3b82f6; /* Blue-500 */
+  --secondary-hover: #2563eb; /* Blue-600 */
+  --accent: #a5b4fc; /* Indigo-200 */
+  --accent2: #bae6fd; /* Blue-200 */
   --border: #e5e7eb;
   --radius: 0.5rem;
   --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --gradient-main: linear-gradient(90deg, #6366f1 0%, #3b82f6 100%);
+  --gradient-hero: linear-gradient(
+    120deg,
+    #6366f1 0%,
+    #a5b4fc 50%,
+    #3b82f6 100%
+  );
+  --gradient-accent: linear-gradient(90deg, #a5b4fc 0%, #bae6fd 100%);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -145,4 +155,15 @@ select {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Gradient utility classes */
+.bg-gradient-main {
+  background: var(--gradient-main);
+}
+.bg-gradient-hero {
+  background: var(--gradient-hero);
+}
+.bg-gradient-accent {
+  background: var(--gradient-accent);
 }
