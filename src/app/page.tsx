@@ -1,7 +1,9 @@
+import HeroSection from "@/components/ui/hero";
+
 export default function HomePage() {
   return (
     <>
-      <section
+      {/* <section
         id="hero"
         className="py-16 flex flex-col items-center text-center gap-4">
         <h1 className="text-4xl font-bold text-primary">
@@ -16,7 +18,8 @@ export default function HomePage() {
           className="hoverable mt-4 px-6 py-3 rounded-md bg-primary text-white text-lg font-semibold hover:bg-primary-hover transition-colors">
           Register Now
         </a>
-      </section>
+      </section> */}
+      <HeroSection/>
 
       <section id="about" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">About</h2>
