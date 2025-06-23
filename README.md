@@ -37,3 +37,5 @@ email and password based login
 
 ## tech stack
 nextjs, tanstack table, mongodb, zod, cloudinary, node emailer (for otp and other info), motion.dev, shadcn ui and aceternity ui
+
+

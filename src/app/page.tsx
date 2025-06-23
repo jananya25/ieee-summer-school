@@ -1,4 +1,5 @@
 import HeroSection from "@/components/hero";
+import { About } from "@/components/about";
 
 export default function HomePage() {
   return (
@@ -21,32 +22,7 @@ export default function HomePage() {
       </section> */}
       <HeroSection/>
 
-      <section id="about" className="py-12">
-        <h2 className="text-2xl font-bold mb-4 text-primary">About</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white rounded-lg shadow hoverable p-6">
-            <h3 className="font-semibold mb-2">IEEE Summer School</h3>
-            <p className="text-sm text-foreground/70">
-              A premier event for students and professionals to explore
-              cutting-edge topics in technology and innovation.
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow hoverable p-6">
-            <h3 className="font-semibold mb-2">IEEE CS Chapter of R-10</h3>
-            <p className="text-sm text-foreground/70">
-              Region 10&apos;s Computer Society chapter fosters collaboration
-              and knowledge sharing across Asia-Pacific.
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow hoverable p-6">
-            <h3 className="font-semibold mb-2">BVICAM</h3>
-            <p className="text-sm text-foreground/70">
-              Bharati Vidyapeeth&apos;s Institute of Computer Applications and
-              Management, New Delhi, is the proud host of this event.
-            </p>
-          </div>
-        </div>
-      </section>
+      <About />
 
       <section id="gallery" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">Gallery</h2>
