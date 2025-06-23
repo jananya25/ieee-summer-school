@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased")}>
         <header className="w-full border-b border-border bg-white/80 backdrop-blur sticky top-0 z-50">
           <nav className="container mx-auto flex items-center justify-between py-4">
@@ -99,7 +99,7 @@ export default function RootLayout({
             </div>
           </nav>
         </header>
-        <main className="container mx-auto py-8">{children}</main>
+        <main className="mx-auto">{children}</main>
       </body>
     </html>
   );
