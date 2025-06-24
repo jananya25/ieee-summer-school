@@ -6,6 +6,7 @@ import { Speaker } from "lucide-react";
 import Speakers from "@/components/Speakers";
 import VenuePage from "@/components/Venue";
 import FAQ from "@/components/faq";
+import GallerySection from "@/components/gallery";
 
 export default function HomePage() {
   return (
@@ -14,16 +15,7 @@ export default function HomePage() {
 
       <About />
 
-      <section id="gallery" className="py-12">
-        <h2 className="text-2xl font-bold mb-4 text-primary">Gallery</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {/* Placeholder images */}
-          <div className="bg-accent aspect-square rounded-lg hoverable"></div>
-          <div className="bg-accent aspect-square rounded-lg hoverable"></div>
-          <div className="bg-accent aspect-square rounded-lg hoverable"></div>
-          <div className="bg-accent aspect-square rounded-lg hoverable"></div>
-        </div>
-      </section>
+      <GallerySection />
 
       {/* <section id="speakers" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">Speakers</h2>

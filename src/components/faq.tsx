@@ -21,7 +21,7 @@ const faqData = [
     id: "2",
     question: "Who can attend this summer school?",
     answer:
-      "The program is open to all IEEE Member students, research scholars, faculty members, and industry professionals interested in advancing their knowledge in data science and its practical applications.",
+      "Registered Fulltime Students and preference will be given to 3rd year and final year students. IEEE and IEEE Computer Society members",
   },
   {
     id: "3",
