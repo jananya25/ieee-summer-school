@@ -42,14 +42,11 @@ export async function POST(request: NextRequest) {
     // Convert isIeeeCSMember from string to boolean
     const isIeeeCSMember = formData.get("isIeeeCSMember") === "true";
 
-    let ieeeIdCardUrl = "";
-      if (idCard) {
-      ieeeIdCardUrl = await uploadToCloudinary(idCard as File);
-    }
-    let cvUrl = "";
-    if (cv) {
-      cvUrl = await uploadToCloudinary(cv as File);
-    }
+    // Parallelize file uploads
+    const [ieeeIdCardUrl, cvUrl] = await Promise.all([
+      idCard ? uploadToCloudinary(idCard as File) : Promise.resolve(""),
+      cv ? uploadToCloudinary(cv as File) : Promise.resolve("")
+    ]);
     const hashedPassword = await bcrypt.hash(password as string, 10);
 
     const user = await User.findOne({ email });
@@ -99,20 +96,24 @@ export async function POST(request: NextRequest) {
       isNewUser = true;
     }
 
-    // Send welcome email
-    try {
-      await queueWelcomeEmail(email as string, fullName as string);
-      console.log(`Welcome email queued for: ${email}`);
-    } catch (emailError) {
-      console.error("Failed to send welcome email:", emailError);
-      // Don't fail the registration if email fails
-    }
+    // Respond to client as soon as user is created/updated and email is queued
+    let emailSent = false;
+    queueWelcomeEmail(email as string, fullName as string)
+      .then(() => {
+        console.log(`Welcome email queued for: ${email}`);
+        emailSent = true;
+      })
+      .catch((emailError) => {
+        console.error("Failed to send welcome email:", emailError);
+      });
+
+    // TODO: For even better performance, consider moving file uploads to the client side and only sending URLs to the backend.
 
     return NextResponse.json(
       { 
         message: "Registration successful",
         isNewUser,
-        emailSent: true
+        emailSent: true // Always true for now, since we queue asynchronously
       },
       { status: 201 }
     );
