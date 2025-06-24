@@ -7,9 +7,9 @@ const scheduleData = [
       time: "10:00 am - 11:00 am", 
       sessions: [
         { name: "Inauguration", speaker: "", designation: "" },
-        { name: "DVP Lecture", speaker: "Prof. Dr. K. Subramanian", designation: "Past Chair, IEEE Delhi Section" },
-        { name: "DVP Lecture", speaker: "Prof. Amlan Chakrabarti", designation: "A.K Choudhary School of Information and Technology, University of Calcutta" },
+        { name: "Session 3: Data Science, Engineering, Management, and Governance: Emerging Professions Driving National Growth through Innovative Analytics Applications in India", speaker: "Prof. Dr. K. Subramanian", designation: "Chair, IEEE CS DS Chapter | IEEE DVP Speaker" },
         { name: "Group Activity", speaker: "", designation: "" },
+        { name: "Session 6: R for Decision Support Systems: Real-World Case Studies and Methodologies", speaker: "Prof. Amlan Chakrabarti", designation: "Professor, Calcutta University | IEEE DVP Speaker" },
         { name: "Presentations", speaker: "", designation: "" }
       ] 
     },
@@ -26,10 +26,10 @@ const scheduleData = [
     { 
       time: "11:15 am – 1:00 pm", 
       sessions: [
-        { name: "DVP Lecture", speaker: "Mohamed Rawidean Mohd. Kassim", designation: "R&D Manager, MIMOS Berhad, Malaysia" },
-        { name: "Introduction to Data Science for Decision-Making", speaker: "Ms. Saumya Aggarwal", designation: "Associate Data Analyst, Professor, Aiprus Software Pvt. Ltd. Gurugram" },
-        { name: "Machine Learning for Predictive Analytics", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
-        { name: "Data Visualization for Storytelling", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
+        { name: "Session 1: Advanced Data Collection and Analytics for Smart Agriculture, Aquaculture, and Environmental Systems", speaker: "Mohamed. Rawidean Mohd. Kassim", designation: "Region 10 CS Director | IEEE DVP Speaker" },
+        { name: "Session 4: Introduction to Data Science for Decision-Making", speaker: "Ms. Saumya Aggarwal", designation: "Associate Data Analyst, Aiprus Software Pvt. Lmt. Gurugram" },
+        { name: "Session 7: Machine Learning for Predictive Analytics", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, University of Delhi, Delhi" },
+        { name: "Session 9: Data Visualization for Storytelling", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, University of Delhi, Delhi" },
         { name: "Project Presentations", speaker: "", designation: "" }
       ] 
     },
@@ -46,10 +46,10 @@ const scheduleData = [
     { 
       time: "2:00 pm - 4:00 pm", 
       sessions: [
-        { name: "Natural Language Processing for Text Analysis", speaker: "Mr. Ajay Ramani", designation: "Software Engineer, Lyxel & Flamingo, Gurugram" },
-        { name: "Hands on training session on Time Series Analysis and Forecasting", speaker: "Ms. Saumya Aggarwal", designation: "Associate Data Analyst, Professor, Aiprus Software Pvt. Ltd. Gurugram" },
-        { name: "Hands on training session on Machine Learning for Predictive Analytics", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
-        { name: "Hands on training session on Data Visualization for Storytelling", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
+        { name: "Session 2: Natural Language Processing for Text Analysis", speaker: "Mr. Ajay Ramani", designation: "Software Engineer, Lyxel & Flamingo, Gurugram" },
+        { name: "Session 5: Hands on training session on Time Series Analysis and Forecasting", speaker: "Ms. Saumya Aggarwal", designation: "Associate Data Analyst, Aiprus Software Pvt. Lmt. Gurugram" },
+        { name: "Session 8: Hands on training session on Machine Learning for Predictive Analytics", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, University of Delhi, Delhi" },
+        { name: "Session 10: Hands on training session on Data Visualization for Storytelling", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, University of Delhi, Delhi" },
         { name: "Valedictory", speaker: "", designation: "" }
       ] 
     },

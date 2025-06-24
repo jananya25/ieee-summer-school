@@ -8,32 +8,32 @@ const Speakers = () => {
     {
       title: "Mohamed. Rawidean Mohd. Kassim",
       src: "/Mohdrawidean.jpg",
-      designation: "R&D Manager, MIMOS Berhad, Malaysia"
+      designation: "Region 10 CS Director | IEEE DVP Speaker"
     },
     {
       title: "Prof. Dr. K. Subramanian",
       src: "/prof-k.jpeg",
-      designation: "Founding director at Advanced Centre for Informatics and Innovative Learning, IGNOU"
+      designation: "Chair, IEEE CS DS Chapter | IEEE DVP Speaker"
     },
     {
       title: "Prof. Amlan Chakrabarti",
       src: "/amlan.jpeg",
-      designation: "Professor at A.K. Choudhary School of Information and Technology, University of Calcutta"
+      designation: "Professor, Calcutta University | IEEE DVP Speaker"
     },
     {
       title: "Mr. Ajay Ramani",
       src: "/ajayramani.jpg",
-      designation: "Software Engineer, Lyxel & Flamingo"
+      designation: "Software Engineer, Lyxel & Flamingo, Gurugram"
     },
     {
       title: "Ms. Saumya Aggarwal",
       src: "/saumya.jpeg",
-      designation: "Associate Data Analyst, Professor, Aiprus Software Pvt. Lmt"
+      designation: "Associate Data Analyst, Aiprus Software Pvt. Lmt. Gurugram"
     },
     {
       title: "Ms. Diksha Jain",
       src: "/diksha.jpeg",
-      designation: "Assistant Professor, Indraprastha College for Women, Delhi"
+      designation: "Assistant Professor, University of Delhi, Delhi"
     },
   ];
 
