@@ -1,5 +1,5 @@
 import { welcomeTemplate } from './templates/welcome';
-import { registrationConfirmationTemplate } from './templates/registration-confirmation';
+import { registrationApprovedTemplate } from './templates/registration-approved';
 import { passwordResetTemplate } from './templates/password-reset';
 import { paymentConfirmationTemplate } from './templates/payment-confirmation';
 import { adminNotificationTemplate } from './templates/admin-notification';
@@ -7,7 +7,7 @@ import { adminNotificationTemplate } from './templates/admin-notification';
 // Template mapping
 const templates: Record<string, (data: any) => string> = {
   welcome: welcomeTemplate,
-  'registration-confirmation': registrationConfirmationTemplate,
+  'registration-approved': registrationApprovedTemplate,
   'password-reset': passwordResetTemplate,
   'payment-confirmation': paymentConfirmationTemplate,
   'admin-notification': adminNotificationTemplate,

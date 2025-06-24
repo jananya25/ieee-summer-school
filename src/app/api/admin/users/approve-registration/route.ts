@@ -20,8 +20,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Access denied. Admin role required." }, { status: 403 });
         }
 
-        const { userId, paymentAmount, schedulePdfLink, qrCodeImage, paymentLink } = await request.json();
-        console.log("userId", userId);  
+        const { 
+            userId, 
+            paymentAmount, 
+            schedulePdfLink, 
+            qrCodeImage, 
+            paymentLink 
+        } = await request.json();
         
         if (!userId) {
             return NextResponse.json({ error: "User ID is required" }, { status: 400 });
@@ -33,16 +38,16 @@ export async function POST(request: NextRequest) {
             }, { status: 400 });
         }
 
-        // Find and update the user
+        // Find the user
         const user = await User.findById(userId);
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        // Update verification status
-        user.isVerified = true;
-        user.updatedAt = new Date();
-        await user.save();
+        // Check if user is already paid
+        if (user.isPaid) {
+            return NextResponse.json({ error: "User has already paid" }, { status: 400 });
+        }
 
         // Send registration approved email with payment request
         try {
@@ -50,32 +55,40 @@ export async function POST(request: NextRequest) {
                 registrationData: {
                     id: user._id,
                     status: 'Approved',
-                    registrationDate: user.createdAt,
-                    verificationDate: new Date().toISOString(),
-                    verifiedBy: currentUser.fullName
+                    registrationDate: user.createdAt
                 },
                 paymentAmount: parseFloat(paymentAmount),
                 schedulePdfLink,
                 qrCodeImage,
                 paymentLink
             });
-            console.log(`Registration approved email queued for ${user.email}`);
+            
+            // Update user status to indicate registration approved and payment request sent
+            user.paymentRequestSent = true;
+            user.paymentRequestSentAt = new Date();
+            user.isVerified = true; // Mark as verified since approved
+            user.updatedAt = new Date();
+            await user.save();
+            
+            console.log(`Registration approved email with payment request queued for ${user.email}`);
         } catch (emailError) {
             console.error("Failed to send registration approved email:", emailError);
-            // Don't fail the verification if email fails
+            return NextResponse.json({ error: "Failed to send registration approved email" }, { status: 500 });
         }
 
         return NextResponse.json({ 
-            message: "User verified successfully",
+            message: "Registration approved and payment request sent successfully",
             user: {
                 id: user.id,
                 email: user.email,
                 fullName: user.fullName,
-                isVerified: user.isVerified
+                isVerified: user.isVerified,
+                paymentRequestSent: user.paymentRequestSent,
+                paymentRequestSentAt: user.paymentRequestSentAt
             }
         });
     } catch (error) {
-        console.error("Error verifying user:", error);
-        return NextResponse.json({ error: "Failed to verify user" }, { status: 500 });
+        console.error("Error sending registration approved email:", error);
+        return NextResponse.json({ error: "Failed to send registration approved email" }, { status: 500 });
     }
 } 

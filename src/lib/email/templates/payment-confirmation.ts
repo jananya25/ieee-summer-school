@@ -27,23 +27,35 @@ export function paymentConfirmationTemplate(data: {
       <h3>What's Next?</h3>
       <ul>
         <li>Your registration is now fully confirmed</li>
-        <li>You'll receive course materials within 24 hours</li>
-        <li>Join our orientation session (details coming soon)</li>
-        <li>Access your learning dashboard</li>
+        <li>You're all set for the 5-day intensive summer school</li>
+        <li>Keep the schedule PDF handy for reference</li>
+        <li>Prepare for an exciting learning experience</li>
+      </ul>
+    </div>
+    
+    <div class="success-box">
+      <h3>Program Highlights</h3>
+      <ul>
+        <li>Introduction to Data Science for Decision-Making</li>
+        <li>Machine Learning for Predictive Analytics</li>
+        <li>Data Visualization for Storytelling</li>
+        <li>Time Series Analysis and Forecasting</li>
+        <li>Deep Learning for Classification and Regression</li>
+        <li>Natural Language Processing for Text Analysis</li>
       </ul>
     </div>
     
     <p><strong>Important Reminders:</strong></p>
     <ol>
       <li>Save this email for your records</li>
-      <li>Check your spam folder for course materials</li>
-      <li>Complete your profile setup if not done already</li>
-      <li>Join our community forum to connect with other participants</li>
+      <li>Keep the schedule PDF accessible</li>
+      <li>Arrive on time for each session</li>
+      <li>Bring your enthusiasm and questions!</li>
     </ol>
     
     <p>If you have any questions about your payment or need assistance, please contact our support team.</p>
     
-    <p>We're excited to have you join us for an amazing learning experience!</p>
+    <p>We're excited to have you join us for this amazing learning experience!</p>
     
     <p>Best regards,<br>
     The R10 IEEE Computer Society Summer School 2025 Team</p>

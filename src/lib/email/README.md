@@ -11,6 +11,14 @@ The email system is built with Nodemailer and provides:
 - Environment-specific configuration
 - Comprehensive error handling
 
+## Email Flow
+
+The system follows this simplified email flow for the 5-day summer school:
+
+1. **Welcome Email** - Sent after registration, informing users to wait for document review
+2. **Registration Approved Email** - Sent after approval, includes registration confirmation, schedule PDF link, QR code, and payment amount
+3. **Payment Confirmation Email** - Sent after manual payment verification
+
 ## Architecture
 
 ```
@@ -22,7 +30,7 @@ src/lib/email/
 ├── templates/            # Individual email templates
 │   ├── index.ts
 │   ├── welcome.ts
-│   ├── registration-confirmation.ts
+│   ├── registration-approved.ts
 │   ├── password-reset.ts
 │   ├── payment-confirmation.ts
 │   └── admin-notification.ts
@@ -82,7 +90,7 @@ const success = await sendEmail({
 ```typescript
 import { 
   sendWelcomeEmail,
-  sendRegistrationConfirmation,
+  sendRegistrationApproved,
   sendPasswordReset,
   sendPaymentConfirmation,
   sendAdminNotification
@@ -91,10 +99,17 @@ import {
 // Send welcome email
 await sendWelcomeEmail('user@example.com', 'John Doe');
 
-// Send registration confirmation
-await sendRegistrationConfirmation('user@example.com', 'John Doe', {
-  id: 'REG123',
-  status: 'Confirmed'
+// Send registration approved with payment request
+await sendRegistrationApproved('user@example.com', 'John Doe', {
+  registrationData: {
+    id: 'REG123',
+    status: 'Approved',
+    registrationDate: new Date().toISOString()
+  },
+  paymentAmount: 299.99,
+  schedulePdfLink: 'https://example.com/schedule.pdf',
+  qrCodeImage: 'https://example.com/qr-code.png',
+  paymentLink: 'https://example.com/pay'
 });
 
 // Send password reset
@@ -119,13 +134,27 @@ await sendAdminNotification('admin@example.com', 'New Registration', {
 ```typescript
 import { 
   queueWelcomeEmail,
-  queueRegistrationConfirmation,
+  queueRegistrationApproved,
+  queuePasswordReset,
   emailQueue,
   getQueueStatus
 } from '@/lib/email/queue';
 
 // Queue an email (recommended for production)
 const emailId = await queueWelcomeEmail('user@example.com', 'John Doe');
+
+// Queue registration approved with payment request
+const approvalId = await queueRegistrationApproved('user@example.com', 'John Doe', {
+  registrationData: {
+    id: 'REG123',
+    status: 'Approved',
+    registrationDate: new Date().toISOString()
+  },
+  paymentAmount: 299.99,
+  schedulePdfLink: 'https://example.com/schedule.pdf',
+  qrCodeImage: 'https://example.com/qr-code.png',
+  paymentLink: 'https://example.com/pay'
+});
 
 // Check queue status
 const status = getQueueStatus();
@@ -151,10 +180,10 @@ const customEmailId = await emailQueue.addToQueue({
 
 ### Available Templates
 
-1. **welcome** - Welcome email for new users
-2. **registration-confirmation** - Registration confirmation
+1. **welcome** - Welcome email for new users (wait for document review)
+2. **registration-approved** - Registration approval with payment request (merged template)
 3. **password-reset** - Password reset request
-4. **payment-confirmation** - Payment confirmation
+4. **payment-confirmation** - Payment confirmation after manual verification
 5. **admin-notification** - Admin notifications
 
 ### Template Data Structure
@@ -165,14 +194,18 @@ Each template expects specific data:
 // Welcome template
 { userName: string }
 
-// Registration confirmation
+// Registration approved (merged template)
 { 
   userName: string;
   registrationData: {
     id: string;
     status: string;
-    // ... other registration details
-  }
+    registrationDate: string;
+  };
+  paymentAmount: number;
+  schedulePdfLink: string;
+  qrCodeImage: string;
+  paymentLink: string;
 }
 
 // Password reset

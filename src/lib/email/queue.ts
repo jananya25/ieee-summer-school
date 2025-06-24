@@ -147,6 +147,32 @@ async function queueRegistrationConfirmation(
   }, 'high');
 }
 
+async function queueRegistrationApproved(
+  userEmail: string, 
+  userName: string, 
+  data: {
+    registrationData: any;
+    paymentAmount: number;
+    schedulePdfLink: string;
+    qrCodeImage: string;
+    paymentLink: string;
+  }
+): Promise<string> {
+  return emailQueue.addToQueue({
+    to: userEmail,
+    subject: 'Registration Approved - R10 IEEE Computer Society Summer School 2025',
+    template: 'registration-approved',
+    data: { 
+      userName, 
+      registrationData: data.registrationData,
+      paymentAmount: data.paymentAmount,
+      schedulePdfLink: data.schedulePdfLink,
+      qrCodeImage: data.qrCodeImage,
+      paymentLink: data.paymentLink
+    },
+  }, 'high');
+}
+
 async function queuePasswordReset(
   userEmail: string, 
   resetToken: string, 
@@ -173,6 +199,30 @@ async function queuePaymentConfirmation(
   }, 'normal');
 }
 
+async function queuePaymentRequest(
+  userEmail: string, 
+  userName: string, 
+  paymentData: {
+    paymentAmount: number;
+    schedulePdfLink: string;
+    qrCodeImage: string;
+    paymentLink: string;
+  }
+): Promise<string> {
+  return emailQueue.addToQueue({
+    to: userEmail,
+    subject: 'Payment Request - R10 IEEE Computer Society Summer School 2025',
+    template: 'payment-request',
+    data: { 
+      userName, 
+      paymentAmount: paymentData.paymentAmount,
+      schedulePdfLink: paymentData.schedulePdfLink,
+      qrCodeImage: paymentData.qrCodeImage,
+      paymentLink: paymentData.paymentLink
+    },
+  }, 'high');
+}
+
 async function queueAdminNotification(
   adminEmail: string,
   notificationType: string,
@@ -194,7 +244,7 @@ export function getQueueStatus() {
 export { 
   emailQueue, 
   queueWelcomeEmail, 
-  queueRegistrationConfirmation, 
+  queueRegistrationApproved, 
   queuePasswordReset, 
   queuePaymentConfirmation, 
   queueAdminNotification

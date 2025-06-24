@@ -1,5 +1,5 @@
 export { welcomeTemplate } from './welcome';
-export { registrationConfirmationTemplate } from './registration-confirmation';
-export { passwordResetTemplate } from './password-reset';
+export { registrationApprovedTemplate } from './registration-approved';
 export { paymentConfirmationTemplate } from './payment-confirmation';
+export { passwordResetTemplate } from './password-reset';
 export { adminNotificationTemplate } from './admin-notification'; 

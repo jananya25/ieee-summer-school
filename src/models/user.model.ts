@@ -19,6 +19,8 @@ export interface User extends Document {
   isPaid: boolean;
   isPaymentVerified: boolean;
   paymentScreenshotUrl: string;
+  paymentRequestSent: boolean;
+  paymentRequestSentAt: Date;
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -95,6 +97,14 @@ const UserSchema: Schema = new Schema({
   },
   paymentScreenshotUrl: {
     type: String,
+    required: false,
+  },
+  paymentRequestSent: {
+    type: Boolean,
+    default: false,
+  },
+  paymentRequestSentAt: {
+    type: Date,
     required: false,
   },
   isDeleted: {

@@ -1,17 +1,9 @@
 // Example integrations for the email system
 // These show how to use the email system in different parts of your application
 
-import { 
-  sendWelcomeEmail, 
-  sendRegistrationConfirmation,
-  sendPasswordReset,
-  sendPaymentConfirmation,
-  sendAdminNotification 
-} from './email';
-
 import {
   queueWelcomeEmail,
-  queueRegistrationConfirmation,
+  queueRegistrationApproved,
   queuePasswordReset,
   queuePaymentConfirmation,
   queueAdminNotification
@@ -25,14 +17,10 @@ export async function handleUserRegistration(userData: {
 }) {
   try {
     // Send welcome email immediately
-    await sendWelcomeEmail(userData.email, userData.name);
+    await queueWelcomeEmail(userData.email, userData.name);
     
-    // Queue registration confirmation (better for production)
-    await queueRegistrationConfirmation(userData.email, userData.name, {
-      id: userData.registrationId,
-      status: 'Pending',
-      registrationDate: new Date().toISOString()
-    });
+    // Note: Registration approval with payment request will be sent separately by admin
+    // after document review
     
     // Notify admin about new registration
     await queueAdminNotification(
@@ -54,7 +42,56 @@ export async function handleUserRegistration(userData: {
   }
 }
 
-// Example 2: Payment Processing Flow
+// Example 2: Registration Approval with Payment Request Flow (Merged)
+export async function handleRegistrationApproval(approvalData: {
+  userEmail: string;
+  userName: string;
+  registrationId: string;
+  paymentAmount: number;
+  schedulePdfLink: string;
+  qrCodeImage: string;
+  paymentLink: string;
+}) {
+  try {
+    // Send registration approved email with payment request
+    await queueRegistrationApproved(
+      approvalData.userEmail, 
+      approvalData.userName, 
+      {
+        registrationData: {
+          id: approvalData.registrationId,
+          status: 'Approved',
+          registrationDate: new Date().toISOString()
+        },
+        paymentAmount: approvalData.paymentAmount,
+        schedulePdfLink: approvalData.schedulePdfLink,
+        qrCodeImage: approvalData.qrCodeImage,
+        paymentLink: approvalData.paymentLink
+      }
+    );
+    
+    // Notify admin about approval sent
+    await queueAdminNotification(
+      process.env.ADMIN_EMAIL || 'admin@ieeesummerschool.com',
+      'Registration Approved',
+      {
+        userEmail: approvalData.userEmail,
+        userName: approvalData.userName,
+        registrationId: approvalData.registrationId,
+        paymentAmount: approvalData.paymentAmount,
+        timestamp: new Date().toISOString(),
+        priority: 'Normal'
+      }
+    );
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Registration approval email error:', error);
+    return { success: false, error: 'Failed to send registration approval email' };
+  }
+}
+
+// Example 3: Payment Processing Flow
 export async function handlePaymentSuccess(paymentData: {
   userEmail: string;
   userName: string;
@@ -94,7 +131,7 @@ export async function handlePaymentSuccess(paymentData: {
   }
 }
 
-// Example 3: Password Reset Flow
+// Example 4: Password Reset Flow
 export async function handlePasswordResetRequest(userData: {
   email: string;
   name: string;
@@ -114,7 +151,7 @@ export async function handlePasswordResetRequest(userData: {
   }
 }
 
-// Example 4: Course Registration Flow
+// Example 5: Course Registration Flow
 export async function handleCourseRegistration(courseData: {
   userEmail: string;
   userName: string;
@@ -123,16 +160,7 @@ export async function handleCourseRegistration(courseData: {
   startDate: string;
 }) {
   try {
-    // Send course confirmation
-    await queueRegistrationConfirmation(courseData.userEmail, courseData.userName, {
-      id: courseData.courseId,
-      status: 'Confirmed',
-      courseName: courseData.courseName,
-      startDate: courseData.startDate,
-      registrationType: 'Course Registration'
-    });
-    
-    // Notify course instructor
+    // Notify course instructor about new registration
     await queueAdminNotification(
       process.env.INSTRUCTOR_EMAIL || 'instructor@ieeesummerschool.com',
       'New Course Registration',
@@ -154,7 +182,7 @@ export async function handleCourseRegistration(courseData: {
   }
 }
 
-// Example 5: Bulk Email Sending
+// Example 6: Bulk Email Sending
 export async function sendBulkAnnouncement(announcementData: {
   recipients: Array<{ email: string; name: string }>;
   subject: string;
@@ -185,7 +213,7 @@ export async function sendBulkAnnouncement(announcementData: {
       results.push({
         email: recipient.email,
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   }
@@ -198,7 +226,7 @@ export async function sendBulkAnnouncement(announcementData: {
   };
 }
 
-// Example 6: Error Notification
+// Example 7: Error Notification
 export async function notifySystemError(errorData: {
   error: Error;
   context: string;
@@ -226,7 +254,7 @@ export async function notifySystemError(errorData: {
   }
 }
 
-// Example 7: Integration with NextAuth.js
+// Example 8: Integration with NextAuth.js
 export async function handleAuthEvents(event: string, user: any) {
   switch (event) {
     case 'signIn':
@@ -251,10 +279,17 @@ export async function handleAuthEvents(event: string, user: any) {
   }
 }
 
-// Example 8: Scheduled Email Tasks
+// Example 9: Scheduled Email Tasks
 export async function sendScheduledReminders() {
   // This could be called by a cron job or scheduled task
-  const upcomingEvents = [
+  const upcomingEvents: Array<{
+    id: string;
+    participantEmail: string;
+    name: string;
+    date: string;
+    location: string;
+    participantName: string;
+  }> = [
     // Fetch from database
   ];
   
