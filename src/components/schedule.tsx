@@ -3,12 +3,66 @@ import { BackgroundBeams } from "./ui/background-beams";
 
 const scheduleData = [
   [
-    { time: "10:00 am - 11:00 am", sessions: ["Inauguration", "Session 3", "Session 6", "Group Activity", "Presentations"] },
-    { time: "11:00 am - 11:15 am", sessions: ["Tea and Networking", "Tea and Networking", "Tea and Networking", "Tea and Networking", "Tea and Networking"] },
-    { time: "11:15 am – 1:00 pm", sessions: ["Session 1", "Session 4", "Session 7", "Session 9", "Project Presentations"] },
-    { time: "1:00 pm – 2:00 pm", sessions: ["Lunch", "Lunch", "Lunch", "Lunch", "Lunch"] },
-    { time: "2:00 pm - 4:00 pm", sessions: ["Session 2 (Including Hands-on training)", "Session 5 (Including Hands-on training)", "Session 8 (Including Hands-on training)", "Session 10 (Including Hands-on training)", "Valedictory"] },
-    { time: "4:00 pm - 4:15 pm", sessions: ["High Tea", "High Tea", "High Tea", "High Tea", "High Tea"] },
+    { 
+      time: "10:00 am - 11:00 am", 
+      sessions: [
+        { name: "Inauguration", speaker: "", designation: "" },
+        { name: "DVP Lecture", speaker: "Prof. Dr. K. Subramanian", designation: "Past Chair, IEEE Delhi Section" },
+        { name: "DVP Lecture", speaker: "Prof. Amlan Chakrabarti", designation: "A.K Choudhary School of Information and Technology, University of Calcutta" },
+        { name: "Group Activity", speaker: "", designation: "" },
+        { name: "Presentations", speaker: "", designation: "" }
+      ] 
+    },
+    { 
+      time: "11:00 am - 11:15 am", 
+      sessions: [
+        { name: "Tea and Networking", speaker: "", designation: "" },
+        { name: "Tea and Networking", speaker: "", designation: "" },
+        { name: "Tea and Networking", speaker: "", designation: "" },
+        { name: "Tea and Networking", speaker: "", designation: "" },
+        { name: "Tea and Networking", speaker: "", designation: "" }
+      ] 
+    },
+    { 
+      time: "11:15 am – 1:00 pm", 
+      sessions: [
+        { name: "DVP Lecture", speaker: "Mohamed Rawidean Mohd. Kassim", designation: "R&D Manager, MIMOS Berhad, Malaysia" },
+        { name: "Introduction to Data Science for Decision-Making", speaker: "Ms. Saumya Aggarwal", designation: "Associate Data Analyst, Professor, Aiprus Software Pvt. Ltd. Gurugram" },
+        { name: "Machine Learning for Predictive Analytics", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
+        { name: "Data Visualization for Storytelling", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
+        { name: "Project Presentations", speaker: "", designation: "" }
+      ] 
+    },
+    { 
+      time: "1:00 pm – 2:00 pm", 
+      sessions: [
+        { name: "Lunch", speaker: "", designation: "" },
+        { name: "Lunch", speaker: "", designation: "" },
+        { name: "Lunch", speaker: "", designation: "" },
+        { name: "Lunch", speaker: "", designation: "" },
+        { name: "Lunch", speaker: "", designation: "" }
+      ] 
+    },
+    { 
+      time: "2:00 pm - 4:00 pm", 
+      sessions: [
+        { name: "Natural Language Processing for Text Analysis", speaker: "Mr. Ajay Ramani", designation: "Software Engineer, Lyxel & Flamingo, Gurugram" },
+        { name: "Hands on training session on Time Series Analysis and Forecasting", speaker: "Ms. Saumya Aggarwal", designation: "Associate Data Analyst, Professor, Aiprus Software Pvt. Ltd. Gurugram" },
+        { name: "Hands on training session on Machine Learning for Predictive Analytics", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
+        { name: "Hands on training session on Data Visualization for Storytelling", speaker: "Ms. Diksha Jain", designation: "Assistant Professor, Indraprastha College for Women, University of Delhi" },
+        { name: "Valedictory", speaker: "", designation: "" }
+      ] 
+    },
+    { 
+      time: "4:00 pm - 4:15 pm", 
+      sessions: [
+        { name: "High Tea", speaker: "", designation: "" },
+        { name: "High Tea", speaker: "", designation: "" },
+        { name: "High Tea", speaker: "", designation: "" },
+        { name: "High Tea", speaker: "", designation: "" },
+        { name: "High Tea", speaker: "", designation: "" }
+      ] 
+    },
   ],
 ];
 
@@ -49,8 +103,18 @@ const Schedule = () => {
                     {slot.time}
                   </td>
                   {slot.sessions.map((session, j) => (
-                    <td key={session + '-' + j} className="px-4 py-3 text-sm text-gray-800 dark:text-gray-100 text-left align-top">
-                      {session}
+                    <td key={session.name + '-' + j} className="px-4 py-3 text-sm text-gray-800 dark:text-gray-100 text-left align-top">
+                      <div className="font-semibold text-indigo-700 dark:text-indigo-300">{session.name}</div>
+                      {session.speaker && (
+                        <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          <span className="font-medium">{session.speaker}</span>
+                        </div>
+                      )}
+                      {session.designation && (
+                        <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                          {session.designation}
+                        </div>
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -70,7 +134,19 @@ const Schedule = () => {
                 {scheduleData[0].map((slot, i) => (
                   <div key={slot.time} className="flex flex-col gap-1 border-b border-indigo-100 dark:border-indigo-900 pb-2 last:border-b-0 last:pb-0">
                     <span className="text-xs font-mono text-gray-500 dark:text-gray-300">{slot.time}</span>
-                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-100" key={slot.sessions[dayIdx] + '-' + i}>{slot.sessions[dayIdx]}</span>
+                    <div className="text-sm font-semibold text-gray-800 dark:text-gray-100 text-indigo-700 dark:text-indigo-300">
+                      {slot.sessions[dayIdx].name}
+                    </div>
+                    {slot.sessions[dayIdx].speaker && (
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        <span className="font-medium">{slot.sessions[dayIdx].speaker}</span>
+                      </div>
+                    )}
+                    {slot.sessions[dayIdx].designation && (
+                      <div className="text-xs text-gray-500 dark:text-gray-500">
+                        {slot.sessions[dayIdx].designation}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -86,3 +162,63 @@ const Schedule = () => {
 };
 
 export { Schedule };
+
+// Detailed Session Schedule:
+// S. No.
+// Proposed Session
+// Proposed Speakers
+// Topic
+// 1.  
+// Session 1
+// DVP lecture
+// Mohamed. Rawidean Mohd. Kassim
+// R&D Manager, MIMOS Berhad, Malaysia
+ 
+// 2.  
+// Session 2
+// Mr. Ajay Ramani
+// Software Engineer, Lyxel & Flamingo, Gurugram
+// Natural Language Processing for Text Analysis
+// 3.  
+// Session 3
+// DVP lecture
+// Prof. Dr. K. Subramanian
+// Past Chair, IEEE Delhi Section
+ 
+// 4.  
+// Session 4
+// Ms. Saumya Aggarwal
+// Associate Data Analyst, Professor, Aiprus Software Pvt. Lmt.Gurugram
+// Introduction to Data Science for Decision-Making
+// 5.  
+// Session 5
+// Ms. Saumya Aggarwal
+// Associate Data Analyst, Professor, Aiprus Software Pvt. Lmt. Gurugram
+// Hands on training session on Time Series Analysis and Forecasting
+// 6.  
+// Session 6
+// DVP lecture
+// Prof. Amlan Chakrabarti
+// A.K Choudhary Schoool of Information and Technology, University of Calcutta, Calcutta
+ 
+// 7.  
+// Session 7
+// Ms. Diksha Jain
+// Assistant Professor, Indraprastha College for Women, University of Delhi, Delhi
+// Machine Learning for Predictive Analytics
+ 
+// 8.  
+// Session 8
+// Ms. Diksha Jain
+// Assistant Professor, Indraprastha College for Women, University of Delhi, Delhi
+// Hands on training session on Machine Learning for Predictive Analytics
+// 9.  
+// Session 9
+// Ms. Diksha Jain
+// Assistant Professor, Indraprastha College for Women, University of Delhi, Delhi
+// Data Visualization for Storytelling
+// 10.  
+// Session 10
+// Ms. Diksha Jain
+// Assistant Professor, Indraprastha College for Women, University of Delhi, Delhi
+// Hands on training session on Data Visualization for Storytelling
