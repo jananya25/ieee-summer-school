@@ -19,7 +19,7 @@ const galleryItems: GalleryItem[] = [
   },
   {
     id: 2,
-    src: "/gallery/DSC00890.jpg",
+    src: "/gallery/hi.jpeg",
     alt: "Gallery-2",
     size: "medium",
   },
@@ -55,7 +55,7 @@ const galleryItems: GalleryItem[] = [
   },
   {
     id: 8,
-    src: "/gallery/delphi.jpeg",
+    src: "/gallery/ieee.jpeg",
     alt: "Delphi",
     size: "small",
   },
