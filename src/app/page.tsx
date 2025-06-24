@@ -7,6 +7,7 @@ import Speakers from "@/components/Speakers";
 import VenuePage from "@/components/Venue";
 import FAQ from "@/components/faq";
 import GallerySection from "@/components/gallery";
+import Footer from "@/components/footer";
 
 export default function HomePage() {
   return (
@@ -68,10 +69,11 @@ export default function HomePage() {
       </section> */}
       <VenuePage/>
 
-      <footer className="py-8 text-center text-foreground/60 text-sm">
+      {/* <footer className="py-8 text-center text-foreground/60 text-sm">
         &copy; {new Date().getFullYear()} R10 IEEE Computer Society Summer School 2025. All rights
         reserved.
-      </footer>
+      </footer> */}
+      <Footer/>
     </>
   );
 }

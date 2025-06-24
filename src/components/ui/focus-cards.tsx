@@ -25,22 +25,26 @@ export const Card = React.memo(
       onMouseEnter={() => setHovered(index)}
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "rounded-xl relative overflow-hidden aspect-square w-full transition-all duration-300 ease-out shadow-md",
+        "rounded-xl overflow-hidden transition-all duration-300 ease-out shadow-md flex flex-col",
         hovered !== null && hovered !== index && "scale-[0.98] opacity-80"
       )}
     >
-      <img
-        src={card.src}
-        alt={card.title}
-        className="object-cover absolute inset-0 w-full h-full"
-      />
+      {/* Image Section */}
+      <div className="relative w-full aspect-square">
+        <img
+          src={card.src}
+          alt={card.title}
+          className="object-cover absolute inset-0 w-full h-full rounded-t-xl"
+        />
+      </div>
 
-      <div className="absolute bottom-0 w-full px-4 py-4 bg-gradient-to-t from-white/20 to-white/10">
-        <div className="text-md md:text-lg font-semibold text-black drop-shadow">
+      {/* Text Section */}
+      <div className="w-full px-4 py-3 bg-[#ddf9f9] rounded-b-xl border-t border-gray-200">
+        <div className="text-md md:text-lg font-semibold text-black">
           {card.title}
         </div>
         {card.designation && (
-          <div className="text-sm md:text-base text-gray-700">
+          <div className="text-sm md:text-base text-gray-600">
             {card.designation}
           </div>
         )}

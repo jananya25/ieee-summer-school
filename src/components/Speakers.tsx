@@ -13,7 +13,7 @@ const Speakers = () => {
     {
       title: "Prof. Dr. K. Subramanian",
       src: "/prof-k.jpeg",
-      designation: "Founding director and Professor at ACIIL, IGNOU"
+      designation: "Founding director at Advanced Centre for Informatics and Innovative Learning, IGNOU"
     },
     {
       title: "Prof. Amlan Chakrabarti",
@@ -33,50 +33,12 @@ const Speakers = () => {
     {
       title: "Ms. Diksha Jain",
       src: "/diksha.jpeg",
-      designation: "Assistant Professor, Indraprastha College for Women, University of Delhi"
+      designation: "Assistant Professor, Indraprastha College for Women, Delhi"
     },
   ];
 
   
 
-
-//   const speakers = [
-//     {
-//       name: "Mr. Ramneek Kalra",
-//       designation: "ExCom, IEEE Delhi Section 2025 | IEEE Impact Creator",
-//       image: "/Ramneek Kalra.jpeg",
-//     },
-//     {
-//       name: "Mr. Ankush Grover",
-//       designation: "1st Generation Entrepreneur",
-//       image: "/Ankush Grover.jpeg",
-//     },
-//     {
-//       name: "Mr. Rohit Kumar Birla",
-//       designation: "Co-founder at Book Keeper App",
-//       image: "/Rohit Birla.jpeg",
-//     },
-//     {
-//       name: "Prof. Shiban Koul",
-//       designation: "Professor Emeritus at IIT, Delhi",
-//       image: "/Shiban Koul.jpeg",
-//     },
-//     {
-//       name: "Dr. Suneel Keswani",
-//       designation: "TEDx Speaker",
-//       image: "/Suneel Keswani.jpeg",
-//     },
-//     {
-//       name: "Mr. Tarun Khanna",
-//       designation: "Director, Research Operations, Knowledge Excel Services",
-//       image: "/Tarun Khanna.jpeg",
-//     },
-//   ];
-
-//   const focusCardsData = speakers.map((speaker) => ({
-//     title: speaker.name,
-//     src: speaker.image,
-//   }));
 
   return (
     <section className="flex flex-col p-4 md:px-16 py-20" id="speakers">
