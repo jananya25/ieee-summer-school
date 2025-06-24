@@ -15,7 +15,7 @@ const faqData = [
     id: "1",
     question: "What is the IEEE Region 10 Summer School 2025 about?",
     answer:
-      "The Summer School focuses on “Data Science for Decision-Making: Methodologies and Applications”. It offers a deep dive into modern data science tools and techniques, emphasizing how they support effective decision-making across domains.",
+      'The Summer School focuses on "Data Science for Decision-Making: Methodologies and Applications". It offers a deep dive into modern data science tools and techniques, emphasizing how they support effective decision-making across domains.',
   },
   {
     id: "2",
@@ -51,14 +51,16 @@ const faqData = [
     id: "6",
     question: "Will I need to bring my own laptop?",
     answer:
-      "Yes, for hands-on sessions, it’s highly recommended that participants bring their personal laptops with required software pre-installed (details will be shared post-registration).",
+      "Yes, for hands-on sessions, it's highly recommended that participants bring their personal laptops with required software pre-installed (details will be shared post-registration).",
   },
 ];
 
 export default function FAQ() {
   return (
     <section className="relative bg-background w-full py-12 md:py-24 lg:py-10 overflow-hidden">
-      <BackgroundLines className="absolute inset-0 z-0" children={undefined} />
+      <BackgroundLines className="absolute inset-0 z-0">
+        <></>
+      </BackgroundLines>
 
       <div className="relative z-10 container mx-auto px-4 md:px-6">
         <div className="grid items-start gap-12 lg:grid-cols-2">
