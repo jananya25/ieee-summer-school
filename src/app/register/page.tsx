@@ -21,6 +21,7 @@ import axios from   "axios";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 const steps = ["Personal Info", "Membership Info", "Account Info"];
 
 const registrationSchema = z.object({
@@ -132,6 +133,17 @@ export default function RegisterPage() {
       if (response.status === 201) {
         toast.success("Registration successful");
         
+        // Auto-login after successful registration
+        const loginResult = await signIn("credentials", {
+          redirect: false,
+          email: data.email,
+          password: data.password,
+        });
+        if (loginResult && !loginResult.error) {
+          router.push("/profile"); 
+        } else {
+          toast.error("Auto-login failed. Please sign in manually.");
+        }
       } else {
         toast.error("Registration failed");
       }
