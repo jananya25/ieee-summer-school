@@ -13,7 +13,7 @@ import {
 const faqData = [
   {
     id: "1",
-    question: "What is the IEEE Region 10 Summer School 2025 about?",
+    question: "What is the R10 Computer Society Summer School 2025 about?",
     answer:
       'The Summer School focuses on "Data Science for Decision-Making: Methodologies and Applications". It offers a deep dive into modern data science tools and techniques, emphasizing how they support effective decision-making across domains.',
   },

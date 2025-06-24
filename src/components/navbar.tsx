@@ -11,14 +11,14 @@ import {
 } from "motion/react";
 
 const navItems = [
-  { href: "#hero", title: "Home" },
-  { href: "#about", title: "About" },
-  { href: "#gallery", title: "Gallery" },
-  { href: "#speakers", title: "Speakers" },
-  { href: "#guidelines", title: "Guidelines" },
-  { href: "#schedule", title: "Schedule" },
-  { href: "#faq", title: "FAQ" },
-  { href: "#venue", title: "Venue" },
+  { href: "/#hero", title: "Home" },
+  { href: "/#about", title: "About" },
+  { href: "/#gallery", title: "Gallery" },
+  { href: "/#speakers", title: "Speakers" },
+  { href: "/#guidelines", title: "Guidelines" },
+  { href: "/#schedule", title: "Schedule" },
+  { href: "/#faq", title: "FAQ" },
+  { href: "/#venue", title: "Venue" },
 ];
 
 export function Navbar({
