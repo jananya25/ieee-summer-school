@@ -142,9 +142,12 @@ export default function RegistrationGuidelines() {
           </CardHeader>
           <CardContent className="space-y-2">
             <ul className="text-muted-foreground list-inside list-disc space-y-2">
+              <li className="text-red-500">
+               Last Date of Registration: 10th July 2025
+              </li>
               <li>
                 Workshop seats will be allocated on a first-come, first-served
-                basis
+                basis , Maximum participants: 30
               </li>
               <li>
                 Certificate will be provided to all the summer school attendees
