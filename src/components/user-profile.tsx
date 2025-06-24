@@ -205,7 +205,7 @@ export function UserProfile({ session }: { session: any }) {
       variants={fadeInUp}
       initial="initial"
       animate="animate"
-      className="container mx-auto p-4 sm:p-6 min-h-screen flex flex-col justify-center mt-16">
+      className="container mx-auto pt-16 p-4 md:pt-24 sm:p-6 min-h-screen flex flex-col justify-center">
       
       <Card className="w-full max-w-4xl mx-auto relative shadow-2xl rounded-3xl border-none bg-white/80 dark:bg-background/80 backdrop-blur-lg">
         {/* Header with logout button */}

@@ -1,6 +1,8 @@
+'use client'
 import React from "react";
 import { FaUsers, FaGraduationCap } from "react-icons/fa";
 import { Container } from "./container";
+import { motion } from "motion/react";
 
 const About = () => {
   return (
@@ -16,12 +18,18 @@ const About = () => {
       <Container>
         <div className="flex flex-col gap-8 items-stretch text-left">
           {/* IEEE CS Chapter Card */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl p-8 flex flex-col items-center justify-center h-full hover:scale-[1.02] transition-transform border border-white/20">
-            <FaUsers className="text-4xl text-blue-400 mb-4 drop-shadow" />
-            <h3 className="font-bold text-xl mb-2 text-blue-200">
+          <motion.div
+            className="flex-1 bg-gradient-to-br from-blue-900/60 via-blue-800/40 to-purple-900/20 backdrop-blur-lg rounded-2xl shadow-2xl p-6 sm:p-8 flex flex-col items-center justify-center h-full border border-blue-300/20 dark:border-white/20 hover:shadow-blue-400/20 hover:scale-[1.03] transition-all duration-300 group"
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            <FaUsers className="text-4xl sm:text-5xl text-blue-400 mb-4 drop-shadow group-hover:text-blue-300 transition-colors duration-200" />
+            <h3 className="font-bold text-lg sm:text-xl mb-2 text-blue-200 group-hover:text-blue-100 transition-colors duration-200">
               IEEE Computer Society Chapter
             </h3>
-            <p className="text-base text-gray-200">
+            <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed">
               The IEEE Computer Society (CS) Chapter serves as a dynamic
               platform for advancing knowledge and fostering innovation in the
               fields of Computer Science and Information Technology. By bringing
@@ -38,14 +46,20 @@ const About = () => {
               collaborative research, empowering participants to stay ahead in
               the rapidly evolving digital landscape.
             </p>
-          </div>
+          </motion.div>
           {/* Summer School Card */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl p-8 flex flex-col items-center justify-center h-full hover:scale-[1.02] transition-transform border border-white/20">
-            <FaGraduationCap className="text-4xl text-pink-400 mb-4 drop-shadow" />
-            <h3 className="font-bold text-xl mb-2 text-pink-200">
+          <motion.div
+            className="flex-1 bg-gradient-to-br from-pink-900/40 via-purple-900/30 to-blue-900/10 backdrop-blur-lg rounded-2xl shadow-2xl p-6 sm:p-8 flex flex-col items-center justify-center h-full border border-pink-300/20 dark:border-white/20 hover:shadow-pink-400/20 hover:scale-[1.03] transition-all duration-300 group"
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+          >
+            <FaGraduationCap className="text-4xl sm:text-5xl text-pink-400 mb-4 drop-shadow group-hover:text-pink-300 transition-colors duration-200" />
+            <h3 className="font-bold text-lg sm:text-xl mb-2 text-pink-200 group-hover:text-pink-100 transition-colors duration-200">
               About the Summer School
             </h3>
-            <p className="text-base text-gray-200">
+            <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed">
               The 2025 IEEE Computer Society Region 10 Summer School on
               &ldquo;Data Science for Decision-Making: Methodologies and
               Applications&rdquo; is a prestigious five-day program hosted by
@@ -74,7 +88,7 @@ const About = () => {
               ongoing research and development in the dynamic field of data
               science.
             </p>
-          </div>
+          </motion.div>
         </div>
       </Container>
     </section>

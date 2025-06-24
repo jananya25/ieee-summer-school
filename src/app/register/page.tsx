@@ -148,32 +148,32 @@ export default function RegisterPage() {
 
   return (
     <DotBackground>
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden w-full">
-        <div className="relative z-10">
+      <div className="min-h-screen flex items-center pt-20 md:pt-24 justify-center relative overflow-hidden w-full">
+        <div className="relative z-10 w-full flex justify-center">
           {/* Main container */}
-          <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl p-8 relative border border-neutral-200 dark:border-neutral-800 md:w-[400px] transition-colors duration-300">
+          <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 relative border border-neutral-200 dark:border-neutral-800 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl transition-colors duration-300 mx-2 sm:mx-4">
             {/* Header */}
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
+            <div className="text-center mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
                 Register
               </h1>
             </div>
 
             {/* Progress indicator */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
+            <div className="mb-6 sm:mb-8">
+              <div className="flex flex-row items-center justify-between mb-4 gap-4">
                 {steps.map((label, i) => (
                   <div
                     key={label}
-                    className="flex flex-col items-center relative flex-1">
+                    className="flex flex-col items-center relative flex-1 min-w-[60px]">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10 border-2 shadow-md ${
+                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10 border-2 shadow-md ${
                         i <= step
                           ? "bg-blue-600 dark:bg-blue-700 text-white border-blue-500 dark:border-blue-400 shadow-blue-100 dark:shadow-blue-900"
                           : "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 border-neutral-300 dark:border-neutral-700"
                       }`}>
                       {i < step ? (
-                        <Check className="w-5 h-5" />
+                        <Check className="w-4 h-4 sm:w-5 sm:h-5" />
                       ) : (
                         getStepIcon(i)
                       )}
@@ -187,7 +187,7 @@ export default function RegisterPage() {
                       {label}
                     </span>
                     {i < steps.length - 1 && (
-                      <div className="absolute top-5 left-1/2 w-full h-0.5 bg-neutral-200 dark:bg-neutral-800 -z-10">
+                      <div className="absolute top-4 sm:top-5 left-1/2 w-full h-0.5 bg-neutral-200 dark:bg-neutral-800 -z-10">
                         <div
                           className={`h-full bg-blue-200 dark:bg-blue-800 transition-all duration-500 rounded-full ${
                             i < step ? "w-full" : "w-0"
@@ -529,24 +529,24 @@ export default function RegisterPage() {
               )}
 
               {/* Navigation buttons */}
-              <div className="flex justify-between items-center pt-8 mt-8 border-t border-neutral-200 dark:border-neutral-800">
+              <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 pt-8 mt-8 border-t border-neutral-200 dark:border-neutral-800">
                 {step > 0 ? (
                   <Button
                     type="button"
                     onClick={prevStep}
-                    className="flex items-center space-x-2 px-6 py-3 text-blue-700 dark:text-blue-200 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-xl transition-all duration-200 font-medium border border-neutral-200 dark:border-neutral-700 shadow-sm">
+                    className="flex items-center justify-center space-x-2 px-6 py-3 text-blue-700 dark:text-blue-200 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-xl transition-all duration-200 font-medium border border-neutral-200 dark:border-neutral-700 shadow-sm w-full sm:w-auto">
                     <ChevronLeft className="w-4 h-4" />
                     <span>Back</span>
                   </Button>
                 ) : (
-                  <div></div>
+                  <div className="hidden sm:block w-full sm:w-auto"></div>
                 )}
 
                 {step < steps.length - 1 ? (
                   <Button
                     type="button"
                     onClick={nextStep}
-                    className="flex items-center space-x-2 px-8 py-3 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-blue-100 dark:shadow-blue-900 hover:shadow-xl hover:shadow-blue-200 dark:hover:shadow-blue-800 border border-blue-500 dark:border-blue-400 z-50">
+                    className="flex items-center justify-center space-x-2 px-8 py-3 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-blue-100 dark:shadow-blue-900 hover:shadow-xl hover:shadow-blue-200 dark:hover:shadow-blue-800 border border-blue-500 dark:border-blue-400 z-50 w-full sm:w-auto">
                     <span>Next</span>
                     <ChevronRight className="w-4 h-4" />
                   </Button>
@@ -554,7 +554,7 @@ export default function RegisterPage() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex items-center space-x-2 px-8 py-3 bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-green-100 dark:shadow-green-900 hover:shadow-xl hover:shadow-green-200 dark:hover:shadow-green-800 border border-green-500 dark:border-green-400">
+                    className="flex items-center justify-center space-x-2 px-8 py-3 bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg shadow-green-100 dark:shadow-green-900 hover:shadow-xl hover:shadow-green-200 dark:hover:shadow-green-800 border border-green-500 dark:border-green-400 w-full sm:w-auto">
                     {isSubmitting ? (
                       <svg className="animate-spin h-4 w-4 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

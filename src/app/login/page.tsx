@@ -56,7 +56,7 @@ export default function LoginForm() {
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-zinc-900 to-black px-4`}
+      className={`min-h-screen flex items-center pt-16 md:pt-24 justify-center bg-gradient-to-br from-black via-zinc-900 to-black px-4`}
     >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
