@@ -19,6 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DotBackground } from "@/components/ui/dot-background";
 import axios from   "axios";
 import { toast } from "sonner";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 const steps = ["Personal Info", "Membership Info", "Account Info"];
 
 const registrationSchema = z.object({
@@ -41,15 +43,9 @@ const registrationSchema = z.object({
   designation: z.string().min(2, "Designation is required"),
 });
 
-type RegistrationForm = z.infer<typeof registrationSchema> & {
-  isMember: boolean;
-  membershipId?: string;
-  idCard?: File;
-  cv?: File;
-};
-
 export default function RegisterPage() {
   const [step, setStep] = React.useState(0);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -135,6 +131,7 @@ export default function RegisterPage() {
       const response = await axios.post("/api/register", formData);
       if (response.status === 201) {
         toast.success("Registration successful");
+        
       } else {
         toast.error("Registration failed");
       }
@@ -159,9 +156,15 @@ export default function RegisterPage() {
 
   // Step navigation logic
   function nextStep() {
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     setStep((s) => Math.min(s + 1, steps.length - 1));
   }
   function prevStep() {
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     setStep((s) => Math.max(s - 1, 0));
   }
 
@@ -219,7 +222,23 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form 
+              onSubmit={handleSubmit(onSubmit, (formErrors) => {
+                // Find the first error message
+                const firstError = Object.values(formErrors)[0];
+                if (firstError && typeof firstError.message === 'string') {
+                  toast.error(firstError.message);
+                } else if (firstError) {
+                  toast.error('Please fill in all required fields correctly.');
+                }
+              })}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && step !== steps.length - 1) {
+                  e.preventDefault();
+                }
+              }}
+              className="space-y-6"
+            >
               {step === 0 && (
                 <div className="space-y-5 animate-in slide-in-from-right duration-300">
                   <div>
@@ -494,7 +513,7 @@ export default function RegisterPage() {
                     </p>
                   </div>
 
-                  <div>
+                  <div> 
                     <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Institution/Company *
                     </label>
@@ -577,9 +596,9 @@ export default function RegisterPage() {
             {/* Footer text */}
             <p className="text-center text-blue-700/80 dark:text-blue-200/80 text-sm mt-6">
               Already have an account?{" "}
-              <button className="text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-white font-medium underline">
+              <Link href={"/login"} className="text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-white font-medium underline">
                 Sign in
-              </button>
+              </Link>
             </p>
           </div>
         </div>
