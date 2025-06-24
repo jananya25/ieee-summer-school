@@ -27,7 +27,7 @@ export function registrationApprovedTemplate(data: {
     
     <div class="info-box">
       <h3>Payment Details</h3>
-      <p><strong>Amount Due:</strong> <span style="font-size: 18px; font-weight: bold; color: #0066cc;">$${data.paymentAmount}</span></p>
+      <p><strong>Amount Due:</strong> <span style="font-size: 18px; font-weight: bold; color: #0066cc;">₹${data.paymentAmount}</span></p>
       <p><strong>Payment Deadline:</strong> Please complete payment within 48 hours to secure your spot</p>
     </div>
     
@@ -41,7 +41,7 @@ export function registrationApprovedTemplate(data: {
       <h3>💳 Payment Options</h3>
       <div style="margin: 20px 0;">
         <a href="${data.paymentLink}" class="button" style="background-color: #0066cc; font-size: 16px; padding: 15px 30px;">
-          Pay Now - $${data.paymentAmount}
+          Pay Now - ₹${data.paymentAmount}
         </a>
       </div>
       

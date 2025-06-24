@@ -184,7 +184,6 @@ export function UserDashboard() {
       accessorKey: "actions",
       cell: ({ row }) => {
         const user = row.original;
-        console.log("user", user);
         return (
           <div className="flex flex-col gap-2">
             {!user.isVerified && (
@@ -200,7 +199,7 @@ export function UserDashboard() {
                 ) : (
                   <Shield className="w-3 h-3 mr-1" />
                 )}
-                Approve & Send Email
+                Approve & Send Payment Email
               </Button>
             )}
             {user.isVerified && !user.isPaymentVerified && (
@@ -216,7 +215,7 @@ export function UserDashboard() {
                 ) : (
                   <CreditCard className="w-3 h-3 mr-1" />
                 )}
-                Verify Payment & Email
+                Mark Payment as Verified
               </Button>
             )}
             {user.isVerified && user.isPaymentVerified && (
@@ -315,8 +314,9 @@ export function UserDashboard() {
     try {
       ongoingRequests.current.add(userId);
       setVerifyingUsers(prev => new Set(prev).add(userId));
-      
-      const response = await fetch("/api/admin/users/approve-registration", {
+
+      // Call the payment verification endpoint
+      const response = await fetch("/api/admin/users/verify-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -326,17 +326,17 @@ export function UserDashboard() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to send payment link");
+        throw new Error(error.error || "Failed to verify payment");
       }
 
       const result = await response.json();
-      toast.success(`Payment link sent to ${result.user.fullName}`);
-      
+      toast.success(`Payment verified and confirmation email sent to ${result.user.fullName}`);
+
       // Refresh the users list
       await fetchUsers();
     } catch (error) {
-      console.error("Error sending payment link:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to send payment link");
+      console.error("Error verifying payment:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to verify payment");
     } finally {
       ongoingRequests.current.delete(userId);
       setVerifyingUsers(prev => {
