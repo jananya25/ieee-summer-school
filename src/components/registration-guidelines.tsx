@@ -59,12 +59,12 @@ const contactGroups: ContactGroup[] = [
       {
         name: "Nidhi Gupta",
         phone: "+91-9211506201",
-        role: "IEEE CHAIR BVICAM",
+        role: " IEEE SB BVICAM Chair",
       },
       {
         name: "Rohit Rawat",
         phone: "+91-9897683764",
-        role: "IEEE CHAIR CS Chapter BVICAM",
+        role: "IEEE SB CS Chapter Chair",
       },
     ],
   },
