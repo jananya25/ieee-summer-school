@@ -15,7 +15,7 @@ export interface User extends Document {
   institutionCompany: string;
   ieeeIdCardUrl: string;
   cvUrl: string;
-  isIeeeMember: boolean;
+  isIeeeCSMember: boolean;
   isPaid: boolean;
   isPaymentVerified: boolean;
   paymentScreenshotUrl: string;
@@ -73,7 +73,7 @@ const UserSchema: Schema = new Schema({
   },
   ieeeMemberId: {
     type: String,
-    required: false,
+    required: true,
   },
   institutionCompany: {
     type: String,
@@ -87,7 +87,7 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: false,
   },
-  isIeeeMember: {
+  isIeeeCSMember: {
     type: Boolean,
     default: false,
   },

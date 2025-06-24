@@ -33,6 +33,19 @@ email and password based login
 
 ### dashboard 
 - users list in tabular format 
+- admin can approve registration and send payment link using a single endpoint:
+
+#### Admin Approval & Payment Link API
+- Endpoint: `/api/admin/users/approve-registration`
+- Use this endpoint to approve a user and/or send a payment link.
+- Accepts in the POST body:
+  - `userId` (required)
+  - `paymentAmount` (optional, overrides default)
+  - `schedulePdfLink` (optional, overrides default)
+  - `qrCodeImage` (optional, overrides default)
+  - `paymentLink` (optional, overrides default)
+- If optional fields are not provided, sensible defaults are used.
+- This endpoint replaces the previous `send-payment-request` and `verify` endpoints.
 
 
 ## tech stack

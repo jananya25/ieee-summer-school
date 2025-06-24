@@ -180,7 +180,7 @@ export function UserDashboard() {
                 ) : (
                   <Shield className="w-3 h-3 mr-1" />
                 )}
-                Verify & Email
+                Approve & Send Email
               </Button>
             )}
             {user.isVerified && !user.isPaymentVerified && (
@@ -254,7 +254,8 @@ export function UserDashboard() {
       ongoingRequests.current.add(userId);
       setVerifyingUsers(prev => new Set(prev).add(userId));
       
-      const response = await fetch("/api/admin/users/verify", {
+      // Use the merged approve-registration endpoint
+      const response = await fetch("/api/admin/users/approve-registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -264,17 +265,17 @@ export function UserDashboard() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to verify user");
+        throw new Error(error.error || "Failed to approve and send email");
       }
 
       const result = await response.json();
-      toast.success(`Verification email sent to ${result.user.fullName}`);
+      toast.success(`Approval email sent to ${result.user.fullName}`);
       
       // Refresh the users list
       await fetchUsers();
     } catch (error) {
-      console.error("Error verifying user:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to verify user");
+      console.error("Error approving user:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to approve and send email");
     } finally {
       ongoingRequests.current.delete(userId);
       setVerifyingUsers(prev => {
@@ -295,7 +296,7 @@ export function UserDashboard() {
       ongoingRequests.current.add(userId);
       setVerifyingUsers(prev => new Set(prev).add(userId));
       
-      const response = await fetch("/api/admin/users/verify-payment", {
+      const response = await fetch("/api/admin/users/approve-registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -305,17 +306,17 @@ export function UserDashboard() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to verify payment");
+        throw new Error(error.error || "Failed to send payment link");
       }
 
       const result = await response.json();
-      toast.success(`Payment verification email sent to ${result.user.fullName}`);
+      toast.success(`Payment link sent to ${result.user.fullName}`);
       
       // Refresh the users list
       await fetchUsers();
     } catch (error) {
-      console.error("Error verifying payment:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to verify payment");
+      console.error("Error sending payment link:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to send payment link");
     } finally {
       ongoingRequests.current.delete(userId);
       setVerifyingUsers(prev => {

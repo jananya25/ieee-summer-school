@@ -3,7 +3,7 @@ type FormData = {
   email: string;
   phone: string;
   gender: string;
-  isMember: boolean;
+  isIeeeCSMember: boolean;
   membershipId: string;
   idCard: File | null;
   password: string;
