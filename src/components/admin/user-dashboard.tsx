@@ -1,0 +1,631 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Search,
+  Users,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Download,
+  RefreshCw,
+  Filter,
+  Eye,
+  Mail,
+  Phone,
+  Building,
+  Calendar,
+  Shield,
+  CreditCard,
+  Loader2,
+} from "lucide-react";
+import { toast } from "sonner";
+
+import {
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+  useReactTable,
+  Row,
+  SortingState,
+  ColumnFiltersState,
+  ColumnDef,
+} from '@tanstack/react-table'
+
+type User = {
+  _id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  institutionCompany: string;
+  designation: string;
+  ieeeMemberId: string;
+  isVerified: boolean;
+  isPaymentVerified: boolean;
+  isPaid: boolean;
+  createdAt: Date;
+}
+
+export function UserDashboard() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [verifyingUsers, setVerifyingUsers] = useState<Set<string>>(new Set());
+  const ongoingRequests = useRef<Set<string>>(new Set());
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const defaultColumns: ColumnDef<User>[] = [
+    {
+      header: "User",
+      accessorKey: "fullName",
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <div>
+            <div className="font-medium">{user.fullName}</div>
+            <div className="text-sm text-muted-foreground">
+              {user.designation}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      header: "Contact",
+      accessorKey: "email",
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <div className="space-y-1">
+            <div className="flex items-center text-sm">
+              <Mail className="w-3 h-3 mr-1 text-muted-foreground" />
+              {user.email}
+            </div>
+            <div className="flex items-center text-sm">
+              <Phone className="w-3 h-3 mr-1 text-muted-foreground" />
+              {user.phone}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      header: "Institution",
+      accessorKey: "institutionCompany",
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <div className="flex items-center text-sm">
+            <Building className="w-3 h-3 mr-1 text-muted-foreground" />
+            {user.institutionCompany}
+          </div>
+        );
+      },
+    },
+    {
+      header: "IEEE Member ID",
+      accessorKey: "ieeeMemberId",
+      cell: ({ row }) => {
+        const user = row.original;
+        return user.ieeeMemberId ? (
+          <Badge variant="secondary">{user.ieeeMemberId}</Badge>
+        ) : (
+          <span className="text-muted-foreground text-sm">N/A</span>
+        );
+      },
+    },
+    {
+      header: "Status",
+      accessorKey: "isVerified",
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <div className="space-y-1">
+            {getStatusBadge(user)}
+            <div className="text-xs text-muted-foreground">
+              {user.isVerified ? "✓ Verified" : "⏳ Pending"}
+              {user.isPaymentVerified && " • ✓ Payment Verified"}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      header: "Registration Date",
+      accessorKey: "createdAt",
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <div className="flex items-center text-sm">
+            <Calendar className="w-3 h-3 mr-1 text-muted-foreground" />
+            {formatDate(user.createdAt)}
+          </div>
+        );
+      },
+    },
+    {
+      header: "Actions",
+      accessorKey: "actions",
+      cell: ({ row }) => {
+        const user = row.original;
+        console.log("user", user);
+        return (
+          <div className="flex flex-col gap-2">
+            {!user.isVerified && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={(e) => handleVerifyUser(user._id)}
+                disabled={verifyingUsers.has(user._id)}
+                className="text-xs"
+              >
+                {verifyingUsers.has(user._id) ? (
+                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                ) : (
+                  <Shield className="w-3 h-3 mr-1" />
+                )}
+                Verify & Email
+              </Button>
+            )}
+            {user.isVerified && !user.isPaymentVerified && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={(e) => handleVerifyPayment(user._id)}
+                disabled={verifyingUsers.has(user._id)}
+                className="text-xs"
+              >
+                {verifyingUsers.has(user._id) ? (
+                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                ) : (
+                  <CreditCard className="w-3 h-3 mr-1" />
+                )}
+                Verify Payment & Email
+              </Button>
+            )}
+            {user.isVerified && user.isPaymentVerified && (
+              <Badge variant="secondary" className="text-xs">
+                <CheckCircle className="w-3 h-3 mr-1" />
+                Complete
+              </Badge>
+            )}
+          </div>
+        );
+      },
+    },
+  ]
+
+  const table = useReactTable({
+    data: filteredUsers,
+    columns: defaultColumns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    state: {
+      sorting,
+      columnFilters,
+    },
+  })
+
+  const fetchUsers = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/admin/users");
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+      const data = await response.json();
+      setUsers(data);
+      setFilteredUsers(data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      toast.error("Failed to load users");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyUser = async (userId: string) => {
+    // Prevent multiple clicks and race conditions
+    if (verifyingUsers.has(userId) || ongoingRequests.current.has(userId)) {
+      return;
+    }
+
+    try {
+      ongoingRequests.current.add(userId);
+      setVerifyingUsers(prev => new Set(prev).add(userId));
+      
+      const response = await fetch("/api/admin/users/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to verify user");
+      }
+
+      const result = await response.json();
+      toast.success(`Verification email sent to ${result.user.fullName}`);
+      
+      // Refresh the users list
+      await fetchUsers();
+    } catch (error) {
+      console.error("Error verifying user:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to verify user");
+    } finally {
+      ongoingRequests.current.delete(userId);
+      setVerifyingUsers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(userId);
+        return newSet;
+      });
+    }
+  };
+
+  const handleVerifyPayment = async (userId: string) => {
+    // Prevent multiple clicks and race conditions
+    if (verifyingUsers.has(userId) || ongoingRequests.current.has(userId)) {
+      return;
+    }
+
+    try {
+      ongoingRequests.current.add(userId);
+      setVerifyingUsers(prev => new Set(prev).add(userId));
+      
+      const response = await fetch("/api/admin/users/verify-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to verify payment");
+      }
+
+      const result = await response.json();
+      toast.success(`Payment verification email sent to ${result.user.fullName}`);
+      
+      // Refresh the users list
+      await fetchUsers();
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to verify payment");
+    } finally {
+      ongoingRequests.current.delete(userId);
+      setVerifyingUsers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(userId);
+        return newSet;
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    let filtered = users;
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (user) =>
+          user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.phone.includes(searchTerm) ||
+          user.institutionCompany.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply status filter
+    if (filterStatus !== "all") {
+      switch (filterStatus) {
+        case "verified":
+          filtered = filtered.filter((user) => user.isVerified);
+          break;
+        case "unverified":
+          filtered = filtered.filter((user) => !user.isVerified);
+          break;
+        case "paid":
+          filtered = filtered.filter((user) => user.isPaid);
+          break;
+        case "unpaid":
+          filtered = filtered.filter((user) => !user.isPaid);
+          break;
+        case "payment-verified":
+          filtered = filtered.filter((user) => user.isPaymentVerified);
+          break;
+        case "payment-pending":
+          filtered = filtered.filter((user) => !user.isPaymentVerified);
+          break;
+      }
+    }
+
+    setFilteredUsers(filtered);
+  }, [users, searchTerm, filterStatus]);
+
+  const getStatusBadge = (user: User) => {
+    if (user.isVerified && user.isPaymentVerified) {
+      return (
+        <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+          <CheckCircle className="w-3 h-3 mr-1" />
+          Complete
+        </Badge>
+      );
+    } else if (user.isVerified && !user.isPaymentVerified) {
+      return (
+        <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+          <Clock className="w-3 h-3 mr-1" />
+          Payment Pending
+        </Badge>
+      );
+    } else {
+      return (
+        <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+          <XCircle className="w-3 h-3 mr-1" />
+          Pending
+        </Badge>
+      );
+    }
+  };
+
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const exportToCSV = () => {
+    const headers = [
+      "Name",
+      "Email",
+      "Phone",
+      "Institution/Company",
+      "Designation",
+      "IEEE Member ID",
+      "Status",
+      "Payment Status",
+      "Registration Date",
+    ];
+
+    const csvData = filteredUsers.map((user) => [
+      user.fullName,
+      user.email,
+      user.phone,
+      user.institutionCompany,
+      user.designation,
+      user.ieeeMemberId || "N/A",
+      user.isVerified ? "Verified" : "Pending",
+      user.isPaymentVerified ? "Paid" : "Unpaid",
+      formatDate(user.createdAt),
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map((row) => row.map((cell) => `"${cell}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `users-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    toast.success("CSV exported successfully");
+  };
+
+  const stats = {
+    total: users.length,
+    verified: users.filter((u) => u.isVerified).length,
+    paid: users.filter((u) => u.isPaid).length,
+    paymentVerified: users.filter((u) => u.isPaymentVerified).length,
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.total}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Verified</CardTitle>
+            <CheckCircle className="h-4 w-4 text-green-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-600">
+              {stats.verified}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Paid</CardTitle>
+            <CheckCircle className="h-4 w-4 text-blue-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-blue-600">{stats.paid}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Payment Verified
+            </CardTitle>
+            <CheckCircle className="h-4 w-4 text-purple-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-purple-600">
+              {stats.paymentVerified}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Controls */}
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div>
+              <CardTitle>User Management</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                View and manage user registrations
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={fetchUsers} variant="outline" size="sm">
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Refresh
+              </Button>
+              <Button onClick={exportToCSV} variant="outline" size="sm">
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Search and Filter */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder="Search by name, email, phone, or institution..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="px-3 py-2 border border-input rounded-md bg-background text-sm"
+            >
+              <option value="all">All Users</option>
+              <option value="verified">Verified Only</option>
+              <option value="unverified">Unverified Only</option>
+              <option value="paid">Paid Only</option>
+              <option value="unpaid">Unpaid Only</option>
+              <option value="payment-verified">Payment Verified</option>
+              <option value="payment-pending">Payment Pending</option>
+            </select>
+          </div>
+
+          {/* Table */}
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8">
+                      <div className="flex items-center justify-center">
+                        <RefreshCw className="w-4 h-4 animate-spin mr-2" />
+                        Loading users...
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8">
+                      No users found
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Pagination */}
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex-1 text-sm text-muted-foreground">
+              Showing {table.getFilteredRowModel().rows.length} of {users.length} users
+            </div>
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+} 
