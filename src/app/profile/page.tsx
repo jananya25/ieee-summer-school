@@ -1,8 +1,6 @@
 "use client";
-import { use, useEffect, useState } from "react";
-import { getUserData } from "../../data/conference-schedule";
+import { useEffect } from "react";
 import { UserProfile } from "@/components/user-profile";
-import { User } from "@/types/user";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 

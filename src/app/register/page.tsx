@@ -30,15 +30,23 @@ const registrationSchema = z.object({
   }),
   isMember: z.boolean(),
   membershipId: z.string().optional(),
-  idCard: z.any().refine((file) => file instanceof File || file === null, {
+  idCard: z.any().optional().refine((file) => file instanceof File, {
     message: "ID Card is required",
+  }),
+  cv: z.any().optional().refine((file) => file instanceof File, {
+    message: "CV is required",
   }),
   password: z.string().min(6, "Password must be at least 6 characters"),
   institution: z.string().min(2, "Institution is required"),
   designation: z.string().min(2, "Designation is required"),
 });
 
-type RegistrationForm = z.infer<typeof registrationSchema>;
+type RegistrationForm = z.infer<typeof registrationSchema> & {
+  isMember: boolean;
+  membershipId?: string;
+  idCard?: File;
+  cv?: File;
+};
 
 export default function RegisterPage() {
   const [step, setStep] = React.useState(0);
@@ -49,7 +57,7 @@ export default function RegisterPage() {
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<RegistrationForm>({
+  } = useForm<any>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       fullName: "",
@@ -58,7 +66,8 @@ export default function RegisterPage() {
       gender: "male",
       isMember: false,
       membershipId: "",
-      idCard: null,
+      idCard: undefined,
+      cv: undefined,
       password: "",
       institution: "",
       designation: "",
@@ -68,9 +77,43 @@ export default function RegisterPage() {
 
   const isMember = watch("isMember");
   const idCard = watch("idCard");
+  const cv = watch("cv");
 
-  async function onSubmit(data: RegistrationForm) {
+  async function onSubmit(data: any) {
     try {
+      // Validate required fields
+      const errors: string[] = [];
+      
+      if (!data.fullName.trim()) errors.push("Full name is required");
+      if (!data.email.trim()) errors.push("Email is required");
+      if (!data.phone.trim()) errors.push("Phone number is required");
+      if (!data.gender) errors.push("Gender is required");
+      if (!data.password.trim()) errors.push("Password is required");
+      if (!data.institution.trim()) errors.push("Institution is required");
+      if (!data.designation.trim()) errors.push("Designation is required");
+      if (!data.idCard) errors.push("ID Card is required");
+      if (!data.cv) errors.push("CV is required");
+      
+      // Validate CV file type and size
+      if (data.cv && data.cv instanceof File) {
+        if (data.cv.type !== "application/pdf") {
+          errors.push("CV must be a PDF file");
+        }
+        if (data.cv.size > 5 * 1024 * 1024) {
+          errors.push("CV file size must be under 5MB");
+        }
+      }
+      
+      // Conditional validation for membership ID
+      if (data.isMember && !data.membershipId?.trim()) {
+        errors.push("IEEE Membership ID is required for members");
+      }
+
+      if (errors.length > 0) {
+        toast.error(`Please fill in all required fields: ${errors.join(", ")}`);
+        return;
+      }
+
       const formData = new FormData();
       formData.append("fullName", data.fullName);
       formData.append("email", data.email);
@@ -84,6 +127,9 @@ export default function RegisterPage() {
       }
       if (data.idCard) {
         formData.append("idCard", data.idCard);
+      }
+      if (data.cv) {
+        formData.append("cv", data.cv);
       }
 
       const response = await axios.post("/api/register", formData);
@@ -191,7 +237,7 @@ export default function RegisterPage() {
                     </div>
                     {errors.fullName && (
                       <p className="text-xs text-red-500 mt-1">
-                        {errors.fullName.message}
+                        {String(errors.fullName.message)}
                       </p>
                     )}
                   </div>
@@ -212,7 +258,7 @@ export default function RegisterPage() {
                     </div>
                     {errors.email && (
                       <p className="text-xs text-red-500 mt-1">
-                        {errors.email.message}
+                        {String(errors.email.message)}
                       </p>
                     )}
                   </div>
@@ -232,7 +278,7 @@ export default function RegisterPage() {
                     </div>
                     {errors.phone && (
                       <p className="text-xs text-red-500 mt-1">
-                        {errors.phone.message}
+                        {String(errors.phone.message)}
                       </p>
                     )}
                   </div>
@@ -252,7 +298,7 @@ export default function RegisterPage() {
                     </select>
                     {errors.gender && (
                       <p className="text-xs text-red-500 mt-1">
-                        {errors.gender.message}
+                        {String(errors.gender.message)}
                       </p>
                     )}
                   </div>
@@ -285,7 +331,7 @@ export default function RegisterPage() {
                       <label
                         className="text-neutral-800 dark:text-blue-100 font-medium cursor-pointer"
                         htmlFor="isMember">
-                        I am an IEEE CS Chapter Member
+                        I am IEEE CS Chapter Member
                       </label>
                     </div>
                   </div>
@@ -303,7 +349,7 @@ export default function RegisterPage() {
                       />
                       {errors.membershipId && (
                         <p className="text-xs text-red-500 mt-1">
-                          {errors.membershipId.message}
+                          {String(errors.membershipId.message)}
                         </p>
                       )}
                     </div>
@@ -364,6 +410,61 @@ export default function RegisterPage() {
                         </p>
                       )}
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
+                      Upload CV *
+                    </label>
+                    <Controller
+                      control={control}
+                      name="cv"
+                      render={({ field: { onChange } }) => (
+                        <div className="relative border-2 border-dashed border-neutral-200 dark:border-neutral-700 rounded-xl p-6 text-center hover:border-blue-400 dark:hover:border-blue-700 transition-colors duration-200 cursor-pointer group bg-white dark:bg-neutral-800">
+                          <input
+                            type="file"
+                            accept="application/pdf"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0] || null;
+                              onChange(file);
+                            }}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          />
+                          <div className="space-y-2">
+                            <div className="w-12 h-12 mx-auto bg-neutral-100 dark:bg-neutral-900 rounded-full flex items-center justify-center group-hover:bg-blue-50 dark:group-hover:bg-blue-950 transition-colors duration-200">
+                              <svg
+                                className="w-6 h-6 text-blue-500 dark:text-blue-300 group-hover:text-blue-700 dark:group-hover:text-blue-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-neutral-800 dark:text-blue-100 font-medium">
+                                {cv
+                                  ? cv.name
+                                  : "Choose PDF file or drag & drop"}
+                              </p>
+                              <p className="text-blue-700 dark:text-blue-300 text-sm">
+                                PDF only (max 3 pages, 5MB)
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    />
+                    {errors.cv &&
+                      typeof errors.cv.message === "string" && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.cv.message}
+                        </p>
+                      )}
+                  </div>
                 </div>
               )}
 
@@ -385,7 +486,7 @@ export default function RegisterPage() {
                     </div>
                     {errors.password && (
                       <p className="text-xs text-red-500 mt-1">
-                        {errors.password.message}
+                        {String(errors.password.message)}
                       </p>
                     )}
                     <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
@@ -408,7 +509,7 @@ export default function RegisterPage() {
                     </div>
                     {errors.institution && (
                       <p className="text-xs text-red-500 mt-1">
-                        {errors.institution.message}
+                        {String(errors.institution.message)}
                       </p>
                     )}
                   </div>
@@ -425,7 +526,7 @@ export default function RegisterPage() {
                     />
                     {errors.designation && (
                       <p className="text-xs text-red-500 mt-1">
-                        {errors.designation.message}
+                        {String(errors.designation.message)}
                       </p>
                     )}
                   </div>

@@ -38,12 +38,13 @@ export default function LoginForm() {
       const result = await signIn("credentials", {
         email,
         password,
-        redirect: true,
-        callbackUrl: "/profile",
+        redirect: false,
       });
 
       if (result?.error) {
         setError("Invalid email or password");
+      } else if (result?.ok) {
+        router.push("/profile");
       }
     } catch (err) {
       console.error(err);

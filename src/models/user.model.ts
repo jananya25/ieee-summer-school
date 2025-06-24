@@ -14,6 +14,8 @@ export interface User extends Document {
   isVerified: boolean;
   institutionCompany: string;
   ieeeIdCardUrl: string;
+  cvUrl: string;
+  isIeeeMember: boolean;
   isPaid: boolean;
   isPaymentVerified: boolean;
   paymentScreenshotUrl: string;
@@ -78,6 +80,14 @@ const UserSchema: Schema = new Schema({
   ieeeIdCardUrl: {
     type: String,
     required: false,
+  },
+  cvUrl: {
+    type: String,
+    required: false,
+  },
+  isIeeeMember: {
+    type: Boolean,
+    default: false,
   },
   isPaid: {
     type: Boolean,

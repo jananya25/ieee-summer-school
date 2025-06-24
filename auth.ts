@@ -20,7 +20,7 @@ export const { handlers, auth } = NextAuth({
         if (!user) {
           throw new InvalidLoginError()
         }
-        const isValid = await bcrypt.compare(credentials!.password, user.password)
+        const isValid = await bcrypt.compare(credentials!.password as string, user.password)
         if (!isValid) {
           throw new InvalidLoginError()
         }
@@ -44,9 +44,12 @@ export const { handlers, auth } = NextAuth({
       return token
     },
    async session({ session, token }) {
-  if (!session.user) session.user = {};
-  if (token.sub) {
-    session.user.id = token.sub;
+  if (!session.user) {
+    session.user = {
+      id: token.sub || '',
+      email: token.email || '',
+      emailVerified: null,
+    } as any;
   }
   return session;
 }
