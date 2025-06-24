@@ -15,6 +15,8 @@ export async function POST(request: NextRequest) {
       "password",
       "gender",
       "phone",
+      "isIeeeCSMember",
+      "ieeeMemberId"
     ];
     for (const field of requiredFields) {
       if (!formData.get(field)) {
@@ -36,6 +38,9 @@ export async function POST(request: NextRequest) {
       ieeeMemberId,
       institutionCompany,
     } = Object.fromEntries(formData) as Record<string, string | File>;
+
+    // Convert isIeeeCSMember from string to boolean
+    const isIeeeCSMember = formData.get("isIeeeCSMember") === "true";
 
     let ieeeIdCardUrl = "";
       if (idCard) {
@@ -66,13 +71,13 @@ export async function POST(request: NextRequest) {
         phone,
         gender,
         designation,
+        isIeeeCSMember,
         ieeeMemberId,
         ieeeIdCardUrl,
         institutionCompany,
         cvUrl,
         password: hashedPassword,
         ...defaultValues,
-        
       });
       await user.save();
     } else {
@@ -83,6 +88,7 @@ export async function POST(request: NextRequest) {
         phone,
         gender,
         designation,
+        isIeeeCSMember,
         ieeeMemberId,
         ieeeIdCardUrl,
         institutionCompany,

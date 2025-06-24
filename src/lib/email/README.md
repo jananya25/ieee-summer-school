@@ -378,3 +378,33 @@ For issues or questions:
 - Review console logs
 - Test with the test page
 - Contact the development team 
+
+## Admin Approval & Payment Link API
+
+Use the following endpoint to approve a user and/or send a payment link:
+
+### Endpoint
+`POST /api/admin/users/approve-registration`
+
+#### Request Body
+- `userId` (required)
+- `paymentAmount` (optional, overrides default)
+- `schedulePdfLink` (optional, overrides default)
+- `qrCodeImage` (optional, overrides default)
+- `paymentLink` (optional, overrides default)
+
+If optional fields are not provided, sensible defaults are used.
+
+#### Example
+```bash
+POST /api/admin/users/approve-registration
+{
+  "userId": "USER_ID_HERE",
+  "paymentAmount": 1700, // optional
+  "schedulePdfLink": "https://example.com/schedule.pdf", // optional
+  "qrCodeImage": "https://example.com/qr.png", // optional
+  "paymentLink": "https://example.com/pay" // optional
+}
+```
+
+This endpoint replaces the previous `send-payment-request` and `verify` endpoints. 

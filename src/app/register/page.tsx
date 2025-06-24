@@ -19,6 +19,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DotBackground } from "@/components/ui/dot-background";
 import axios from   "axios";
 import { toast } from "sonner";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 const steps = ["Personal Info", "Membership Info", "Account Info"];
 
 const registrationSchema = z.object({
@@ -28,8 +31,8 @@ const registrationSchema = z.object({
   gender: z.enum(["male", "female", "other"], {
     required_error: "Gender is required",
   }),
-  isMember: z.boolean(),
-  membershipId: z.string().optional(),
+  isIeeeCSMember: z.boolean(),
+  membershipId: z.string().min(1, "IEEE Membership ID is required"),
   idCard: z.any().optional().refine((file) => file instanceof File, {
     message: "ID Card is required",
   }),
@@ -41,15 +44,9 @@ const registrationSchema = z.object({
   designation: z.string().min(2, "Designation is required"),
 });
 
-type RegistrationForm = z.infer<typeof registrationSchema> & {
-  isMember: boolean;
-  membershipId?: string;
-  idCard?: File;
-  cv?: File;
-};
-
 export default function RegisterPage() {
   const [step, setStep] = React.useState(0);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -64,7 +61,7 @@ export default function RegisterPage() {
       email: "",
       phone: "",
       gender: "male",
-      isMember: false,
+      isIeeeCSMember: false,
       membershipId: "",
       idCard: undefined,
       cv: undefined,
@@ -75,45 +72,12 @@ export default function RegisterPage() {
     mode: "onTouched",
   });
 
-  const isMember = watch("isMember");
+  const isIeeeCSMember = watch("isIeeeCSMember");
   const idCard = watch("idCard");
   const cv = watch("cv");
 
   async function onSubmit(data: any) {
     try {
-      // Validate required fields
-      const errors: string[] = [];
-      
-      if (!data.fullName.trim()) errors.push("Full name is required");
-      if (!data.email.trim()) errors.push("Email is required");
-      if (!data.phone.trim()) errors.push("Phone number is required");
-      if (!data.gender) errors.push("Gender is required");
-      if (!data.password.trim()) errors.push("Password is required");
-      if (!data.institution.trim()) errors.push("Institution is required");
-      if (!data.designation.trim()) errors.push("Designation is required");
-      if (!data.idCard) errors.push("ID Card is required");
-      if (!data.cv) errors.push("CV is required");
-      
-      // Validate CV file type and size
-      if (data.cv && data.cv instanceof File) {
-        if (data.cv.type !== "application/pdf") {
-          errors.push("CV must be a PDF file");
-        }
-        if (data.cv.size > 5 * 1024 * 1024) {
-          errors.push("CV file size must be under 5MB");
-        }
-      }
-      
-      // Conditional validation for membership ID
-      if (data.isMember && !data.membershipId?.trim()) {
-        errors.push("IEEE Membership ID is required for members");
-      }
-
-      if (errors.length > 0) {
-        toast.error(`Please fill in all required fields: ${errors.join(", ")}`);
-        return;
-      }
-
       const formData = new FormData();
       formData.append("fullName", data.fullName);
       formData.append("email", data.email);
@@ -122,9 +86,8 @@ export default function RegisterPage() {
       formData.append("password", data.password);
       formData.append("designation", data.designation);
       formData.append("institutionCompany", data.institution);
-      if (data.isMember && data.membershipId) {
-        formData.append("ieeeMemberId", data.membershipId);
-      }
+      formData.append("isIeeeCSMember", String(data.isIeeeCSMember));
+      formData.append("ieeeMemberId", data.membershipId);
       if (data.idCard) {
         formData.append("idCard", data.idCard);
       }
@@ -135,6 +98,18 @@ export default function RegisterPage() {
       const response = await axios.post("/api/register", formData);
       if (response.status === 201) {
         toast.success("Registration successful");
+        
+        // Auto-login after successful registration
+        const loginResult = await signIn("credentials", {
+          redirect: false,
+          email: data.email,
+          password: data.password,
+        });
+        if (loginResult && !loginResult.error) {
+          router.push("/profile"); 
+        } else {
+          toast.error("Auto-login failed. Please sign in manually.");
+        }
       } else {
         toast.error("Registration failed");
       }
@@ -159,9 +134,15 @@ export default function RegisterPage() {
 
   // Step navigation logic
   function nextStep() {
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     setStep((s) => Math.min(s + 1, steps.length - 1));
   }
   function prevStep() {
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     setStep((s) => Math.max(s - 1, 0));
   }
 
@@ -219,7 +200,23 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form 
+              onSubmit={handleSubmit(onSubmit, (formErrors) => {
+                // Find the first error message
+                const firstError = Object.values(formErrors)[0];
+                if (firstError && typeof firstError.message === 'string') {
+                  toast.error(firstError.message);
+                } else if (firstError) {
+                  toast.error('Please fill in all required fields correctly.');
+                }
+              })}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && step !== steps.length - 1) {
+                  e.preventDefault();
+                }
+              }}
+              className="space-y-6"
+            >
               {step === 0 && (
                 <div className="space-y-5 animate-in slide-in-from-right duration-300">
                   <div>
@@ -312,48 +309,46 @@ export default function RegisterPage() {
                       <div className="relative">
                         <input
                           type="checkbox"
-                          id="isMember"
-                          {...register("isMember")}
+                          id="isIeeeCSMember"
+                          {...register("isIeeeCSMember")}
                           className="hidden"
                         />
                         <div
-                          onClick={() => setValue("isMember", !isMember)}
+                          onClick={() => setValue("isIeeeCSMember", !isIeeeCSMember)}
                           className={`w-5 h-5 border-2 rounded cursor-pointer transition-all duration-200 flex items-center justify-center ${
-                            isMember
+                            isIeeeCSMember
                               ? "bg-blue-600 dark:bg-blue-700 border-blue-500 dark:border-blue-400"
                               : "border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:border-blue-400 dark:hover:border-blue-700"
                           }`}>
-                          {isMember && (
+                          {isIeeeCSMember && (
                             <Check className="w-3 h-3 text-blue-700 dark:text-blue-200 m-0.5" />
                           )}
                         </div>
                       </div>
                       <label
                         className="text-neutral-800 dark:text-blue-100 font-medium cursor-pointer"
-                        htmlFor="isMember">
-                        I am IEEE CS Chapter Member
+                        htmlFor="isIeeeCSMember">
+                        I am an IEEE CS Chapter Member
                       </label>
                     </div>
                   </div>
 
-                  {isMember && (
-                    <div className="animate-in slide-in-from-top duration-300">
-                      <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
-                        IEEE Membership ID *
-                      </label>
-                      <Input
-                        {...register("membershipId", { required: isMember })}
-                        placeholder="Enter your IEEE membership ID"
-                        className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
-                        required={isMember}
-                      />
-                      {errors.membershipId && (
-                        <p className="text-xs text-red-500 mt-1">
-                          {String(errors.membershipId.message)}
-                        </p>
-                      )}
-                    </div>
-                  )}
+                  <div>
+                    <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
+                      IEEE Membership ID *
+                    </label>
+                    <Input
+                      {...register("membershipId", { required: true })}
+                      placeholder="Enter your IEEE membership ID"
+                      className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-colors duration-200 shadow-sm"
+                      required
+                    />
+                    {errors.membershipId && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {String(errors.membershipId.message)}
+                      </p>
+                    )}
+                  </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
@@ -494,7 +489,7 @@ export default function RegisterPage() {
                     </p>
                   </div>
 
-                  <div>
+                  <div> 
                     <label className="block text-sm font-semibold text-neutral-800 dark:text-blue-100 mb-2">
                       Institution/Company *
                     </label>
@@ -577,9 +572,9 @@ export default function RegisterPage() {
             {/* Footer text */}
             <p className="text-center text-blue-700/80 dark:text-blue-200/80 text-sm mt-6">
               Already have an account?{" "}
-              <button className="text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-white font-medium underline">
+              <Link href={"/login"} className="text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-white font-medium underline">
                 Sign in
-              </button>
+              </Link>
             </p>
           </div>
         </div>

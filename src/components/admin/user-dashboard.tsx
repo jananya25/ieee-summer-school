@@ -58,6 +58,7 @@ type User = {
   isPaymentVerified: boolean;
   isPaid: boolean;
   createdAt: Date;
+  paymentScreenshotUrl?: string;
 }
 
 export function UserDashboard() {
@@ -160,11 +161,29 @@ export function UserDashboard() {
       },
     },
     {
+      header: "Payment Receipt",
+      accessorKey: "paymentScreenshotUrl",
+      cell: ({ row }) => {
+        const user = row.original;
+        return user.paymentScreenshotUrl ? (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => window.open(user.paymentScreenshotUrl, '_blank')}
+            className="text-xs"
+          >
+            View Receipt
+          </Button>
+        ) : (
+          <span className="text-muted-foreground text-xs">Not uploaded</span>
+        );
+      },
+    },
+    {
       header: "Actions",
       accessorKey: "actions",
       cell: ({ row }) => {
         const user = row.original;
-        console.log("user", user);
         return (
           <div className="flex flex-col gap-2">
             {!user.isVerified && (
@@ -180,7 +199,7 @@ export function UserDashboard() {
                 ) : (
                   <Shield className="w-3 h-3 mr-1" />
                 )}
-                Verify & Email
+                Approve & Send Payment Email
               </Button>
             )}
             {user.isVerified && !user.isPaymentVerified && (
@@ -196,7 +215,7 @@ export function UserDashboard() {
                 ) : (
                   <CreditCard className="w-3 h-3 mr-1" />
                 )}
-                Verify Payment & Email
+                Mark Payment as Verified
               </Button>
             )}
             {user.isVerified && user.isPaymentVerified && (
@@ -254,7 +273,8 @@ export function UserDashboard() {
       ongoingRequests.current.add(userId);
       setVerifyingUsers(prev => new Set(prev).add(userId));
       
-      const response = await fetch("/api/admin/users/verify", {
+      // Use the merged approve-registration endpoint
+      const response = await fetch("/api/admin/users/approve-registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -264,17 +284,17 @@ export function UserDashboard() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to verify user");
+        throw new Error(error.error || "Failed to approve and send email");
       }
 
       const result = await response.json();
-      toast.success(`Verification email sent to ${result.user.fullName}`);
+      toast.success(`Approval email sent to ${result.user.fullName}`);
       
       // Refresh the users list
       await fetchUsers();
     } catch (error) {
-      console.error("Error verifying user:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to verify user");
+      console.error("Error approving user:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to approve and send email");
     } finally {
       ongoingRequests.current.delete(userId);
       setVerifyingUsers(prev => {
@@ -294,7 +314,8 @@ export function UserDashboard() {
     try {
       ongoingRequests.current.add(userId);
       setVerifyingUsers(prev => new Set(prev).add(userId));
-      
+
+      // Call the payment verification endpoint
       const response = await fetch("/api/admin/users/verify-payment", {
         method: "POST",
         headers: {
@@ -309,8 +330,8 @@ export function UserDashboard() {
       }
 
       const result = await response.json();
-      toast.success(`Payment verification email sent to ${result.user.fullName}`);
-      
+      toast.success(`Payment verified and confirmation email sent to ${result.user.fullName}`);
+
       // Refresh the users list
       await fetchUsers();
     } catch (error) {

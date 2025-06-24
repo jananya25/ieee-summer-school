@@ -17,7 +17,7 @@ export function paymentConfirmationTemplate(data: {
     <div class="info-box">
       <h3>Payment Details</h3>
       <p><strong>Transaction ID:</strong> ${data.paymentDetails.transactionId || 'N/A'}</p>
-      <p><strong>Amount Paid:</strong> $${data.paymentDetails.amount || 'N/A'}</p>
+      <p><strong>Amount Paid:</strong> ₹${data.paymentDetails.amount || 'N/A'}</p>
       <p><strong>Payment Method:</strong> ${data.paymentDetails.method || 'N/A'}</p>
       <p><strong>Payment Date:</strong> ${new Date().toLocaleDateString()}</p>
       <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">Completed</span></p>

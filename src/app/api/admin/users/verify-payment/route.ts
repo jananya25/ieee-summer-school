@@ -37,16 +37,24 @@ export async function POST(request: NextRequest) {
         user.isPaid = true;
         user.updatedAt = new Date();
         await user.save();
+        // Use the same logic as approve-registration for payment details
+        const qrCodeImage = "https://res.cloudinary.com/djmdoyahp/image/upload/v1750754977/importants/PHOTO-2025-01-08-11-26-45_iv3pqv.jpg";
+        const schedulePdfLink = "https://res.cloudinary.com/djmdoyahp/image/upload/v1750754977/importants/PHOTO-2025-01-08-11-26-45_iv3pqv.jpg";
+        const paymentLink = `https://ieeesummerschool.com/pay/${userId || 'unknown'}`;  
+        const paymentAmount = user.isIeeeCSMember ? 1700 : 2000;
 
         // Send payment confirmation email
         try {
             await queuePaymentConfirmation(user.email, user.fullName, {
                 transactionId: `PAY-${user._id}-${Date.now()}`,
-                amount: '299.99', // You can make this dynamic based on your pricing
+                amount: paymentAmount,
                 method: 'Admin Verification',
                 paymentDate: new Date().toISOString(),
                 status: 'Completed',
-                verifiedBy: currentUser.fullName
+                verifiedBy: currentUser.fullName,
+                schedulePdfLink,
+                qrCodeImage,
+                paymentLink
             });
             console.log(`Payment confirmation email queued for ${user.email}`);
         } catch (emailError) {
