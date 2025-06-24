@@ -4,6 +4,8 @@ import { About } from "@/components/about";
 import { Schedule } from "@/components/schedule";
 import { Speaker } from "lucide-react";
 import Speakers from "@/components/Speakers";
+import VenuePage from "@/components/Venue";
+import FAQ from "@/components/faq";
 
 export default function HomePage() {
   return (
@@ -51,7 +53,7 @@ export default function HomePage() {
 
         <Schedule/>
 
-      <section id="faq" className="py-12">
+      {/* <section id="faq" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">FAQ</h2>
         <div className="space-y-4">
           <div className="bg-white rounded-lg shadow hoverable p-4">
@@ -63,14 +65,16 @@ export default function HomePage() {
             A: Details will be announced soon.
           </div>
         </div>
-      </section>
+      </section> */}
+      <FAQ/>
 
-      <section id="venue" className="py-12">
+      {/* <section id="venue" className="py-12">
         <h2 className="text-2xl font-bold mb-4 text-primary">Venue</h2>
         <div className="bg-white rounded-lg shadow hoverable p-6">
           BVICAM, New Delhi
         </div>
-      </section>
+      </section> */}
+      <VenuePage/>
 
       <footer className="py-8 text-center text-foreground/60 text-sm">
         &copy; {new Date().getFullYear()} R10 IEEE Computer Society Summer School 2025. All rights

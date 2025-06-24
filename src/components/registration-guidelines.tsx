@@ -147,7 +147,7 @@ export default function RegistrationGuidelines() {
                 basis
               </li>
               <li>
-                Certificate will be provided to all the congress attendees
+                Certificate will be provided to all the summer school attendees
               </li>
             </ul>
           </CardContent>
@@ -247,7 +247,7 @@ export default function RegistrationGuidelines() {
                 <TableCell>Twin Room: Without Breakfast: Rs. 2000</TableCell>
                 <TableCell>
                   {" "}
-                  <p className="mt-2 text-sm text-gray-700">
+                  <p className="mt-2 text-sm text-neutral-400">
                     Ravi:{" "}
                     <a
                       href="tel:+919560217756"
@@ -264,7 +264,7 @@ export default function RegistrationGuidelines() {
                 <TableCell>Twin Room: Without Breakfast: Rs 2000</TableCell>
                 <TableCell>
                   {" "}
-                  <p className="mt-2 text-sm text-gray-700">
+                  <p className="mt-2 text-sm text-neutral-400">
                     Priya:{" "}
                     <a
                       href="tel:+919311414031"
@@ -286,7 +286,7 @@ export default function RegistrationGuidelines() {
                 </TableCell>
                 <TableCell>
                   {" "}
-                  <p className="mt-2 text-sm text-gray-700">
+                  <p className="mt-2 text-sm text-neutral-400">
                     Anju:{" "}
                     <a
                       href="tel:+918700538574"
@@ -306,7 +306,7 @@ export default function RegistrationGuidelines() {
               an extreme emergency, you may contact us for last minute
               arrangements for accommodations.
             </p>
-            <p className="mt-2 text-sm text-gray-700">
+            <p className="mt-2 text-sm text-neutral-400">
               Mukul Bhardwaj:{" "}
               <a
                 href="tel:+9195361728127"
