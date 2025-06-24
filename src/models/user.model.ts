@@ -10,7 +10,6 @@ export interface User extends Document {
   role: string;
   designation: string;
   ieeeMemberId: string;
-  isPaymentLinkSent: boolean;
   isVerified: boolean;
   institutionCompany: string;
   ieeeIdCardUrl: string;
@@ -58,10 +57,6 @@ const UserSchema: Schema = new Schema({
   },
   role: {
     type: String,
-  },
-  isPaymentLinkSent: {
-    type: Boolean,
-    default: false,
   },
   isPaymentVerified: {
     type: Boolean,

@@ -8,13 +8,14 @@ export interface User {
   role: string;
   designation: string;
   ieeeMemberId?: string;
-  isPaymentLinkSent: boolean;
   isVerified: boolean;
   institutionCompany: string;
   ieeeIdCardUrl?: string;
   isPaid: boolean;
   isPaymentVerified: boolean;
   paymentScreenshotUrl?: string;
+  paymentRequestSent: boolean;
+  paymentRequestSentAt?: Date;
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;

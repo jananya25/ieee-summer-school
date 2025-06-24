@@ -377,7 +377,7 @@ For issues or questions:
 - Check this documentation
 - Review console logs
 - Test with the test page
-- Contact the development team
+- Contact the development team 
 
 ## Admin Approval & Payment Link API
 

@@ -58,6 +58,7 @@ type User = {
   isPaymentVerified: boolean;
   isPaid: boolean;
   createdAt: Date;
+  paymentScreenshotUrl?: string;
 }
 
 export function UserDashboard() {
@@ -156,6 +157,25 @@ export function UserDashboard() {
             <Calendar className="w-3 h-3 mr-1 text-muted-foreground" />
             {formatDate(user.createdAt)}
           </div>
+        );
+      },
+    },
+    {
+      header: "Payment Receipt",
+      accessorKey: "paymentScreenshotUrl",
+      cell: ({ row }) => {
+        const user = row.original;
+        return user.paymentScreenshotUrl ? (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => window.open(user.paymentScreenshotUrl, '_blank')}
+            className="text-xs"
+          >
+            View Receipt
+          </Button>
+        ) : (
+          <span className="text-muted-foreground text-xs">Not uploaded</span>
         );
       },
     },

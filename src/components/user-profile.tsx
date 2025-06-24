@@ -317,15 +317,24 @@ export function UserProfile({ session }: { session: any }) {
                     status={user.ieeeIdCardUrl ? "uploaded" : "pending"}
                   />
                 )}
-                <PaymentCard
-                  user={user}
-                  file={file}
-                  isUploading={isUploading}
-                  uploadError={uploadError}
-                  onFileChange={handleFileChange}
-                  onUpload={handleUpload}
-                  onResetFile={resetFile}
-                />
+                {user.paymentScreenshotUrl && (
+                  <DocumentCard
+                    title="Payment Receipt"
+                    imageUrl={user.paymentScreenshotUrl}
+                    status={"uploaded"}
+                  />
+                )}
+                {!user.paymentScreenshotUrl && (
+                  <PaymentCard
+                    user={user}
+                    file={file}
+                    isUploading={isUploading}
+                    uploadError={uploadError}
+                    onFileChange={handleFileChange}
+                    onUpload={handleUpload}
+                    onResetFile={resetFile}
+                  />
+                )}
               </div>
             </InfoSection>
           </motion.div>
@@ -589,7 +598,7 @@ function PaymentCard({
 
   const getPaymentStatus = () => {
     if (user.isPaid && user.isPaymentVerified) return "completed";
-    if (user.isPaymentLinkSent) return "pending";
+    if (user.paymentRequestSent) return "pending";
     return "waiting";
   };
 

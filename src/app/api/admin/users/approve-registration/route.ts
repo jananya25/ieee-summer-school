@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
         console.error("Error sending registration approved email:", error);
         return NextResponse.json({ error: "Failed to send registration approved email" }, { status: 500 });
     }
-}
+} 
 
 // This endpoint merges the logic of registration approval and payment link sending.
 // It accepts optional payment info and can be used for both admin approval and payment requests. 
