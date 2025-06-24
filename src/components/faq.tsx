@@ -57,7 +57,7 @@ const faqData = [
 
 export default function FAQ() {
   return (
-    <section className="relative bg-background w-full py-12 md:py-24 lg:py-10 overflow-hidden">
+    <section className="relative bg-background w-full py-12 md:py-24 lg:py-10 overflow-hidden" id="faq">
       <BackgroundLines className="absolute inset-0 z-0">
         <></>
       </BackgroundLines>

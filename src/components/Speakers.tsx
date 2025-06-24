@@ -7,7 +7,7 @@ const Speakers = () => {
   const cards = [
     {
       title: "Mohamed. Rawidean Mohd. Kassim",
-      src: "/Mohdrawidean.jpg",
+      src: "/Mohdrawidean.webp",
       designation: "Region 10 CS Director | IEEE DVP Speaker"
     },
     {
@@ -27,7 +27,7 @@ const Speakers = () => {
     },
     {
       title: "Ms. Saumya Aggarwal",
-      src: "/saumya.jpeg",
+      src: "/saumya.png",
       designation: "Associate Data Analyst, Aiprus Software Pvt. Lmt. Gurugram"
     },
     {

@@ -109,7 +109,7 @@ export default function RegistrationGuidelines() {
   return (
     <section
       className="container mx-auto px-4 py-8 md:px-6 lg:px-8"
-      id="registration-guidelines"
+      id="guidelines"
     >
       <h1 className="text-primary my-4 text-center text-4xl font-bold">
         Registration Guidelines

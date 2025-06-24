@@ -68,109 +68,34 @@ export default function HeroSection() {
               28th July - 1st August 2025
             </span>
 
-            {/* Avatars */}
-            {/* <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {avatars.map((avatar, index) => (
-                <motion.div
-                  key={index}
-                  className="relative"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + index * 0.05, duration: 0.4 }}
-                >
-                  <Image
-                    src={avatar || "/avatar.jpeg"}
-                    alt={`User ${index + 1}`}
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 border-white shadow-md object-cover"
-                  />
-                </motion.div>
-              ))}
-            </div> */}
-
-            {/* Company Logos */}
-            {/* <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 pt-4 sm:pt-6 opacity-80">
-              <div className="flex items-center space-x-2">
-                 <img
-                  src="/ieee.png"
-                  alt="ieee"
-                  className="h-5 w-5 sm:h-15 sm:w-15 object-contain"
-                />{" "} */}
-            {/* <span className="text-xs sm:text-sm font-medium text-gray-200">IEEE</span> */}
-            {/* </div>
-              <div className="flex items-center space-x-2">
-                 <img
-                  src="/ieeds.png"
-                  alt="ieeeds"
-                  className="h-15 w-15 object-contain"
-                />{" "} */}
-            {/* <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-blue-500"></div>
-                <span className="text-xs sm:text-sm font-medium text-blue-200">
-                  IEEE BVICAM
-                </span> */}
-
-            {/* 
-              <div className="flex items-center space-x-2">
-                <img
-                  src="/cschatper2.png"
-                  alt="CS Chapter Logo"
-                  className="h-8 w-8 sm:h-12 sm:w-12 object-contain"
-                /> */}
-            {/* <span className="text-xs sm:text-sm font-medium text-blue-200">
-                  IEEE BVICAM CS Chapter
-                </span> */}
-            {/* </div>
-              <div className="flex items-center space-x-2">
-                <img
-                  src="/bvicam.png"
-                  alt="bvicam"
-                  className="h-15 w-15 object-contain"
-                />{" "} */}
-            {/* <div className="h-5 w-5 sm:h-6 sm:w-6 rounded bg-purple-600"></div>
-                <span className="text-xs sm:text-sm font-medium text-purple-200">
-                  BVICAM
-                </span> */}
-            {/* </div>
-              <div className="flex items-center space-x-2">
-                <img
-                  src="/bvicamsb.png"
-                  alt="bvicamsb"
-                  className="h-15 w-15 object-contain"
-                />{" "}
-                </div>
-            </div> */}
-
             {/* Company Logos White Strip */}
-            <div className="mt-8 w-full bg-white bg-opacity-60 py-4 shadow-inner">
-              <div className="flex flex-wrap items-center justify-center gap-6 px-4">
+              <div className="mt-8 w-full bg-white/80 bg-opacity-60 p-4 rounded-3xl shadow-inner flex flex-wrap items-center justify-center gap-6">
                 <img
                   src="/ieee.png"
                   alt="IEEE"
-                  className="h-16 w-36 object-fit"
+                  className="h-12 w-32 object-fit"
                 />
                 <img
                   src="/ieeds.png"
                   alt="IEEE DS"
-                  className="h-16 w-36 object-fit"
+                  className="h-12 w-32 object-fit"
                 />
                 <img
                   src="/ieeecschapter.png"
                   alt="CS Chapter Logo"
-                  className="h-16 w-36 object-fit"
+                  className="h-12 w-32 object-fit"
                 />
                 <img
                   src="/bvicam.png"
                   alt="BVICAM"
-                  className="h-16 w-36 object-fit"
+                  className="h-12 w-32 object-fit"
                 />
                 <img
                   src="/bvicamsb.png"
                   alt="BVICAM SB"
-                  className="h-16 w-36 object-fit"
+                  className="h-12 w-32 object-fit"
                 />
               </div>
-            </div>
           </div>
         </motion.div>
       </div>
