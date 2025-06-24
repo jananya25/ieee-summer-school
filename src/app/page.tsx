@@ -8,22 +8,6 @@ import Speakers from "@/components/Speakers";
 export default function HomePage() {
   return (
     <>
-      {/* <section
-        id="hero"
-        className="py-16 flex flex-col items-center text-center gap-4">
-        <h1 className="text-4xl font-bold text-primary">
-          IEEE Summer School 2024
-        </h1>
-        <p className="text-lg text-foreground/80 max-w-xl">
-          Empowering the next generation of innovators. Join us for a week of
-          learning, networking, and growth.
-        </p>
-        <a
-          href="/register"
-          className="hoverable mt-4 px-6 py-3 rounded-md bg-primary text-white text-lg font-semibold hover:bg-primary-hover transition-colors">
-          Register Now
-        </a>
-      </section> */}
       <HeroSection/>
 
       <About />
@@ -89,7 +73,7 @@ export default function HomePage() {
       </section>
 
       <footer className="py-8 text-center text-foreground/60 text-sm">
-        &copy; {new Date().getFullYear()} IEEE Summer School. All rights
+        &copy; {new Date().getFullYear()} R10 IEEE Computer Society Summer School 2025. All rights
         reserved.
       </footer>
     </>

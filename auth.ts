@@ -44,12 +44,13 @@ export const { handlers, auth } = NextAuth({
       return token
     },
    async session({ session, token }) {
-  if (!session.user) {
-    session.user = {
-      id: token.sub || '',
-      email: token.email || '',
-      emailVerified: null,
-    } as any;
+  if (!session.user) session.user = {
+    id: token.sub || '',
+    email: token.email || '',
+    emailVerified: null,
+  } as any;
+  if (token.sub) {
+    session.user.id = token.sub;
   }
   return session;
 }

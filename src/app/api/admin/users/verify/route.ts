@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/user.model";
 import dbConnect from "@/lib/db";
 import { auth } from "@/auth";
+import { queueRegistrationConfirmation } from "@/lib/email/queue";
 
 export async function POST(request: NextRequest) {
     const session = await auth();
@@ -37,9 +38,20 @@ export async function POST(request: NextRequest) {
         user.updatedAt = new Date();
         await user.save();
 
-        // TODO: Send verification email
-        // You can integrate with your email service here (SendGrid, Nodemailer, etc.)
-        console.log(`Sending verification email to ${user.email}`);
+        // Send registration confirmation email
+        try {
+            await queueRegistrationConfirmation(user.email, user.fullName, {
+                id: user._id,
+                status: 'Confirmed',
+                registrationDate: user.createdAt,
+                verificationDate: new Date().toISOString(),
+                verifiedBy: currentUser.fullName
+            });
+            console.log(`Registration confirmation email queued for ${user.email}`);
+        } catch (emailError) {
+            console.error("Failed to send registration confirmation email:", emailError);
+            // Don't fail the verification if email fails
+        }
 
         return NextResponse.json({ 
             message: "User verified successfully",

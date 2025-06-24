@@ -14,7 +14,7 @@ export default function ProfilePage() {
       return;
     }
     if (!session) {
-      router.push("/api/auth/signin");
+      router.push("/login");
     }
   }, [session, status, router]);
 

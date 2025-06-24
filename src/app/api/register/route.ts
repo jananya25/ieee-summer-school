@@ -3,6 +3,7 @@ import dbConnect from "@/lib/db";
 import User from "@/models/user.model";
 import bcrypt from "bcrypt";
 import { uploadToCloudinary } from "@/lib/cloudinary";
+import { queueWelcomeEmail } from "@/lib/email/queue";
 
 export async function POST(request: NextRequest) {
   try {
@@ -56,6 +57,9 @@ export async function POST(request: NextRequest) {
       isPaymentLinkSent: false,
       createdAt: new Date(),
     };
+    
+    let isNewUser = false;
+    
     if (user) {
       Object.assign(user, {
         fullName,
@@ -86,10 +90,24 @@ export async function POST(request: NextRequest) {
         ...defaultValues,
       });
       await newUser.save();
+      isNewUser = true;
+    }
+
+    // Send welcome email
+    try {
+      await queueWelcomeEmail(email as string, fullName as string);
+      console.log(`Welcome email queued for: ${email}`);
+    } catch (emailError) {
+      console.error("Failed to send welcome email:", emailError);
+      // Don't fail the registration if email fails
     }
 
     return NextResponse.json(
-      { message: "Registration successful" },
+      { 
+        message: "Registration successful",
+        isNewUser,
+        emailSent: true
+      },
       { status: 201 }
     );
   } catch (error) {

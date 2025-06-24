@@ -32,7 +32,7 @@ export default function HeroSection() {
           className="flex flex-col items-center justify-center space-y-8 text-center shadow-xl rounded-3xl h-[80vh] bg-black/30 backdrop-blur-md p-8">
           <div className="space-y-4">
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
-              IEEE Summer School 2025
+              R10 IEEE Computer Society Summer School 2025
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-gray-300 md:text-xl font-medium">
               <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-blue-200 font-semibold text-base mb-2 shadow-sm">

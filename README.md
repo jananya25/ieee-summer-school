@@ -4,7 +4,7 @@
 
 - herosetion
 - about section
-  - about ieee summer school
+  - about R10 IEEE Computer Society Summer School 2025
   - about ieee cs chapter of r-10
   - about bvicam
   - gallery

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/user.model";
 import dbConnect from "@/lib/db";
 import { auth } from "@/auth";
+import { queuePaymentConfirmation } from "@/lib/email/queue";
 
 export async function POST(request: NextRequest) {
     const session = await auth();
@@ -37,9 +38,21 @@ export async function POST(request: NextRequest) {
         user.updatedAt = new Date();
         await user.save();
 
-        // TODO: Send payment verification email
-        // You can integrate with your email service here (SendGrid, Nodemailer, etc.)
-        console.log(`Sending payment verification email to ${user.email}`);
+        // Send payment confirmation email
+        try {
+            await queuePaymentConfirmation(user.email, user.fullName, {
+                transactionId: `PAY-${user._id}-${Date.now()}`,
+                amount: '299.99', // You can make this dynamic based on your pricing
+                method: 'Admin Verification',
+                paymentDate: new Date().toISOString(),
+                status: 'Completed',
+                verifiedBy: currentUser.fullName
+            });
+            console.log(`Payment confirmation email queued for ${user.email}`);
+        } catch (emailError) {
+            console.error("Failed to send payment confirmation email:", emailError);
+            // Don't fail the verification if email fails
+        }
 
         return NextResponse.json({ 
             message: "Payment verified successfully",
