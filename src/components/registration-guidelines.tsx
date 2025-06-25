@@ -255,11 +255,11 @@ export default function RegistrationGuidelines() {
               <TableRow>
                 <TableCell>Hotel Swathi</TableCell>
                 <TableCell>300 m from BVICAM</TableCell>
-                <TableCell>Twin Room: Without Breakfast: Rs. 2000</TableCell>
+                <TableCell>Standard Room: Without Breakfast: Rs. 1800</TableCell>
                 <TableCell>
                   {" "}
                   <p className="mt-2 text-sm text-neutral-400">
-                    Ravi:{" "}
+                    Avneesh:{" "}
                     <a
                       href="tel:+919560217756"
                       className="text-blue-600 hover:text-blue-800"
@@ -272,7 +272,7 @@ export default function RegistrationGuidelines() {
               <TableRow>
                 <TableCell>Hotel Golden Saffron By Qotel</TableCell>
                 <TableCell>1.8 km from BVICAM</TableCell>
-                <TableCell>Twin Room: Without Breakfast: Rs 2000</TableCell>
+                <TableCell>Standard Room: Without Breakfast: Rs 3000</TableCell>
                 <TableCell>
                   {" "}
                   <p className="mt-2 text-sm text-neutral-400">
@@ -291,19 +291,19 @@ export default function RegistrationGuidelines() {
                 <TableCell>3.8 km from BVICAM</TableCell>
                 <TableCell>
                   {" "}
-                  Twin Room: With Breakfast: Rs. 3000
+                  Standard Room: With Breakfast: Rs. 2500
                   <br />
-                  Twin Room: Without Breakfast: Rs. 2500
+                  Standard Room: Without Breakfast: Rs. 2000
                 </TableCell>
                 <TableCell>
                   {" "}
                   <p className="mt-2 text-sm text-neutral-400">
-                    Anju:{" "}
+                    Vijay:{" "}
                     <a
-                      href="tel:+918700538574"
+                      href="tel:+919810158766"
                       className="text-blue-600 hover:text-blue-800"
                     >
-                      +918700538574
+                      +919810158766
                     </a>
                   </p>
                 </TableCell>
