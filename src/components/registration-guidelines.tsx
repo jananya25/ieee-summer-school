@@ -210,13 +210,13 @@ export default function RegistrationGuidelines() {
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell>IEEE Member</TableCell>
-                <TableCell>₹2000</TableCell> 
+                <TableCell>IEEE Member / IEEE CS Member</TableCell>
+                <TableCell>₹1700</TableCell> 
            </TableRow>
-              <TableRow>
+              {/* <TableRow>
                 <TableCell>IEEE CS Member</TableCell>
                 <TableCell>₹1700</TableCell> 
-          </TableRow>
+          </TableRow> */}
             </TableBody>
           </Table>
         </CardContent>
