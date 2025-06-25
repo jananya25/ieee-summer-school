@@ -67,7 +67,7 @@ export default function LoginForm() {
         <Card className="border border-zinc-700 bg-black/30 backdrop-blur-xl shadow-xl">
           <CardHeader className="text-center space-y-2">
             <CardTitle className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Sign in to IEEE
+              Sign in to Summer School
             </CardTitle>
             <p className="text-sm text-zinc-300">Access your dashboard</p>
           </CardHeader>
