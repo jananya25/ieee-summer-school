@@ -222,7 +222,7 @@ export default function RegistrationGuidelines() {
             </TableBody>
           </Table>
 
-          <p  className="mt-4 text-sm text-red-500">
+          <p  className="mt-4 text-base text-red-500">
             <strong>Accommodation:</strong><br/>
           All the out-stationed participants shall be provided dormitory accommodation, on shared bases, absolutely free, inside the Campus, during the entire duration of the Summer School.
           However, participants, who want Hotel Accommodation, may directly book the Hotel on payment basis, details of which is given here under:-
@@ -236,10 +236,10 @@ export default function RegistrationGuidelines() {
           <CardTitle className="flex items-center gap-2 text-2xl">
             Nearby Accommodations
           </CardTitle>
-          <CardDescription className="text-sm text-red-500">
+          {/* <CardDescription className="text-sm text-red-500">
             The participants will be responsible for bearing the cost of their
             accommodation.*
-          </CardDescription>
+          </CardDescription> */}
         </CardHeader>
         <CardContent>
           <Table className="md:text-md mt-4">
@@ -311,7 +311,7 @@ export default function RegistrationGuidelines() {
             </TableBody>
           </Table>
 
-          <div className="bg-Red-100 mt-4 rounded-lg p-4">
+          {/* <div className="bg-Red-100 mt-4 rounded-lg p-4">
             <p className="text-lg text-red-700">
               <span className="text-lg font-bold">Note: </span> In the event of
               an extreme emergency, you may contact us for last minute
@@ -326,7 +326,7 @@ export default function RegistrationGuidelines() {
                 +9195361728127
               </a>
             </p>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
 
