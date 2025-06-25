@@ -196,10 +196,10 @@ export default function RegistrationGuidelines() {
               <TableRow>
                 <TableHead>Membership Type</TableHead>
                 <TableHead>Registration Fees{' '} 
-                    <span style = {{color: 'red'}}>
+                    {/* <span style = {{color: 'red'}}>
                         *exclusive of Accommodation
                     </span>
-                    
+                     */}
                     </TableHead> 
            {/* <TableHead>
                  With Accommodation{' '}
@@ -213,12 +213,20 @@ export default function RegistrationGuidelines() {
                 <TableCell>IEEE Member / IEEE CS Member</TableCell>
                 <TableCell>₹1700</TableCell> 
            </TableRow>
+
+          
               {/* <TableRow>
                 <TableCell>IEEE CS Member</TableCell>
                 <TableCell>₹1700</TableCell> 
           </TableRow> */}
             </TableBody>
           </Table>
+
+          <p  className="mt-4 text-sm text-red-500">
+            <strong>Accommodation:</strong><br/>
+          All the out-stationed participants shall be provided dormitory accommodation, on shared bases, absolutely free, inside the Campus, during the entire duration of the Summer School.
+          However, participants, who want Hotel Accommodation, may directly book the Hotel on payment basis, details of which is given here under:-
+          </p>
         </CardContent>
       </Card>
 
