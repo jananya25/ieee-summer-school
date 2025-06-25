@@ -76,9 +76,9 @@ export default function HeroSection() {
                   className="h-12 w-32 object-fit"
                 />
                 <img
-                  src="/ieeds.png"
+                  src="/ieeeds.png"
                   alt="IEEE DS"
-                  className="h-12 w-32 object-fit"
+                  className="h-15 w-24 object-fit"
                 />
                 <img
                   src="/ieeecschapter.png"
