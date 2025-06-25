@@ -57,7 +57,7 @@ export function Navbar({
       <Link href={"/"}>
         <Image
           className="h-10 w-10 rounded-full"
-          src="/avatar.jpeg"
+          src="/bvicam.png"
           height={40}
           width={40}
           alt="avatar"
