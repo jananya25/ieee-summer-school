@@ -13,7 +13,7 @@ interface GalleryItem {
 const galleryItems: GalleryItem[] = [
   {
     id: 1,
-    src: "/gallery/delphi.jpeg",
+    src: "/gallery/sb.jpeg",
     alt: "Gallery-1",
     size: "large",
   },
