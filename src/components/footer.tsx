@@ -67,8 +67,8 @@ const Footer = () => {
                   Designed and Developed by{" "}
                   <a
                     href="https://amrendram.me"
-                    className="text-gray-400 hover:text-gray-300">
-                    BVICAM
+                    className="text-gray-400 hover:text-gray-300 underline">
+                    Ananya Jain and Kumar Amrendram 
                   </a>
                 </p>
             </div>
