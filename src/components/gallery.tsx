@@ -13,13 +13,13 @@ interface GalleryItem {
 const galleryItems: GalleryItem[] = [
   {
     id: 1,
-    src: "/gallery/DSC00093.jpg",
+    src: "/gallery/delphi.jpeg",
     alt: "Gallery-1",
     size: "large",
   },
   {
     id: 2,
-    src: "/gallery/hi.jpeg",
+    src: "/gallery/atal-fdp-2.jpeg",
     alt: "Gallery-2",
     size: "medium",
   },
@@ -31,7 +31,7 @@ const galleryItems: GalleryItem[] = [
   },
   {
     id: 4,
-    src: "/gallery/atal-fdp.jpeg",
+    src: "/gallery/hi.jpeg",
     alt: "Atal FDP",
     size: "medium",
   },
@@ -43,13 +43,13 @@ const galleryItems: GalleryItem[] = [
   },
   {
     id: 6,
-    src: "/gallery/atal-fdp-2.jpeg",
+    src: "/gallery/p3.jpeg",
     alt: "Atal FDP 2",
     size: "small",
   },
   {
     id: 7,
-    src: "/gallery/session-1.jpeg",
+    src: "/gallery/p2.jpeg",
     alt: "Session 1",
     size: "small",
   },
