@@ -64,7 +64,7 @@ const contactGroups: ContactGroup[] = [
       {
         name: "Rohit Rawat",
         phone: "+91-9897683764",
-        role: "IEEE BVICAM SB CS Chapter Chair",
+        role: "IEEE BVICAM CS Chapter Chair",
       },
     ],
   },
