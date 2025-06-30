@@ -70,12 +70,21 @@ const Footer = () => {
             <p className="text-gray-400">
               Designed and Developed by{" "}
               <a
+                href="https://ananya-jain.vercel.app"
+                className="text-gray-400 underline hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ananya Jain 
+              </a>{" "}
+              and{" "}
+              <a
                 href="https://amrendram.me"
                 className="text-gray-400 underline hover:text-gray-300"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Ananya Jain and Kumar Amrendram
+                  Kumar Amrendram
               </a>
             </p>
 
