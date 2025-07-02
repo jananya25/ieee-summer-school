@@ -1,4 +1,4 @@
-import { createEmailWrapper } from '../templates';
+import { createEmailWrapper } from "../templates";
 
 export function welcomeTemplate(data: { userName: string }): string {
   const content = `
@@ -23,7 +23,12 @@ export function welcomeTemplate(data: { userName: string }): string {
       <p>Your registration has been received and is currently under review. Here's what happens next:</p>
       <ol>
         <li><strong>Document Review:</strong> Our team will review your registration details</li>
-        <li><strong>Payment Link:</strong> Once approved, you'll receive a payment link with schedule details</li>
+        <li><strong>Payment Link:</strong> Once approved, you'll receive an email with payment QR code</li>
+        <li><strong>Upload:</strong> Once paid, Kindly upload the screenshot on your profile page: 
+        <a href="https://summer-school.bvicam.in/profile" target="_blank" style="color: #0066cc; text-decoration: underline;">
+      Profile Page
+    </a>
+         </li>
         <li><strong>Confirmation:</strong> After payment confirmation, you'll be all set!</li>
       </ol>
     </div>
@@ -37,13 +42,16 @@ export function welcomeTemplate(data: { userName: string }): string {
       </ul>
     </div>
     
-    <p>Please wait for our review process to complete. You'll receive a payment link with all the necessary details once your registration is approved.</p>
+    <p>Please wait for our review process to complete. You'll receive a payment email with all the necessary details once your registration is approved.</p>
     
     <p>If you have any questions, don't hesitate to reach out to our support team.</p>
     
     <p>Best regards,<br>
     The R10 IEEE Computer Society Summer School 2025 Team</p>
   `;
-  
-  return createEmailWrapper(content, 'Welcome to R10 IEEE Computer Society Summer School 2025');
-} 
+
+  return createEmailWrapper(
+    content,
+    "Welcome to R10 IEEE Computer Society Summer School 2025",
+  );
+}
