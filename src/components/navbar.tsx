@@ -19,6 +19,7 @@ const navItems = [
   { href: "/#schedule", title: "Schedule" },
   { href: "/#faq", title: "FAQ" },
   { href: "/#venue", title: "Venue" },
+  { href: "/#contact", title: "Contact Us" },
 ];
 
 export function Navbar({

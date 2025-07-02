@@ -331,7 +331,7 @@ export default function RegistrationGuidelines() {
       </Card>
 
       {/* Contact Information */}
-      <div className="space-y-6 py-12">
+      <div className="space-y-6 py-12" id = "contact">
         {contactGroups.map((group, idx) => (
           <div key={group.title}>
             <div className="mb-6 flex items-center gap-2">
