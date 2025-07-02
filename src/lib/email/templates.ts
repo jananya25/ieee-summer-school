@@ -128,7 +128,7 @@ export function createEmailWrapper(content: string, title?: string): string {
         <div class="footer">
           <p>© 2025 R10 IEEE Computer Society Summer School 2025. All rights reserved.</p>
           <p>This email was sent to you because you registered for R10 IEEE Computer Society Summer School 2025.</p>
-          <p>If you have any questions, please contact us at support@ieeesummerschool.com</p>
+          <p>If you have any questions, please contact us at summer-school@bvicam.in</p>
         </div>
       </div>
     </body>
