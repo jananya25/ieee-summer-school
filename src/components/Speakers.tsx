@@ -53,7 +53,7 @@ const Speakers = () => {
         </h1>
         <Bar classname="mx-auto" />
       </div>
-      <FocusCards cards={cards} />;
+      <FocusCards cards={cards} />
 
       {/* <p className="text-xl text-center text-gray-600">
         Get ready to be inspired by world-renowned experts in the field of
