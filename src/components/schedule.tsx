@@ -8,7 +8,7 @@ const scheduleData = [
       sessions: [
         { name: "Inauguration", speaker: "", designation: "" },
         { name: "Session 3: Data Science, Engineering, Management, and Governance: Emerging Professions Driving National Growth through Innovative Analytics Applications in India", speaker: "Prof. Dr. K. Subramanian", designation: "Chair, IEEE CS DS Chapter | IEEE DVP Speaker" },
-        { name: "Group Activity", speaker: "", designation: "" },
+        { name: "From Perceptrons to Transformers: A Deep Dive into Predictive Modeling", speaker: "Dr. Sivakumar Perumal", designation: "Professor at Sasi Institute of Technology & Engineering" },
         { name: "Session 6: R for Decision Support Systems: Real-World Case Studies and Methodologies", speaker: "Prof. Amlan Chakrabarti", designation: "Professor, Calcutta University | IEEE DVP Speaker" },
         { name: "Presentations", speaker: "", designation: "" }
       ] 
