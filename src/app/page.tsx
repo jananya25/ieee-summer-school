@@ -7,11 +7,13 @@ import VenuePage from "@/components/Venue";
 import FAQ from "@/components/faq";
 import GallerySection from "@/components/gallery";
 import Footer from "@/components/footer";
+import Prizes from "@/components/prizes";
 
 export default function HomePage() {
   return (
     <>
       <HeroSection/>
+      <Prizes/>
       <About />
       <GallerySection />
       <Speakers/>
