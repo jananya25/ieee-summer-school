@@ -35,6 +35,11 @@ const Speakers = () => {
       src: "/diksha.jpeg",
       designation: "Assistant Professor, University of Delhi, Delhi"
     },
+    {
+      title: "Dr. Sivakumar Perumal ",
+      src: "/per.jpg",
+      designation: "Professor at Sasi Institute of Technology & Engineering"
+    },
   ];
 
   
