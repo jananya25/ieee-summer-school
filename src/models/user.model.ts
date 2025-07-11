@@ -20,6 +20,8 @@ export interface User extends Document {
   paymentScreenshotUrl: string;
   paymentRequestSent: boolean;
   paymentRequestSentAt: Date;
+  finalEmailSent: boolean;
+  finalEmailSentAt: Date;
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -99,6 +101,14 @@ const UserSchema: Schema = new Schema({
     default: false,
   },
   paymentRequestSentAt: {
+    type: Date,
+    required: false,
+  },
+  finalEmailSent: {
+    type: Boolean,
+    default: false,
+  },
+  finalEmailSentAt: {
     type: Date,
     required: false,
   },

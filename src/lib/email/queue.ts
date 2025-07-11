@@ -236,6 +236,19 @@ async function queueAdminNotification(
   }, 'low');
 }
 
+async function queueFinalNotification(
+  userEmail: string, 
+  userName: string, 
+  registrationData: any
+): Promise<string> {
+  return emailQueue.addToQueue({
+    to: userEmail,
+    subject: 'Final Notification - R10 IEEE Computer Society Summer School 2025',
+    template: 'final-notification',
+    data: { userName, registrationData },
+  }, 'normal');
+}
+
 // Export queue status function
 export function getQueueStatus() {
   return emailQueue.getQueueStatus();
@@ -247,5 +260,6 @@ export {
   queueRegistrationApproved, 
   queuePasswordReset, 
   queuePaymentConfirmation, 
-  queueAdminNotification
+  queueAdminNotification,
+  queueFinalNotification
 };

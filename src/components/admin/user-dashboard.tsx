@@ -59,6 +59,8 @@ type User = {
   isPaid: boolean;
   createdAt: Date;
   paymentScreenshotUrl?: string;
+  finalEmailSent?: boolean;
+  finalEmailSentAt?: Date;
 }
 
 export function UserDashboard() {
@@ -142,6 +144,7 @@ export function UserDashboard() {
             <div className="text-xs text-muted-foreground">
               {user.isVerified ? "✓ Verified" : "⏳ Pending"}
               {user.isPaymentVerified && " • ✓ Payment Verified"}
+              {user.finalEmailSent && " • 📧 Final Email Sent"}
             </div>
           </div>
         );
@@ -186,21 +189,43 @@ export function UserDashboard() {
         const user = row.original;
         return (
           <div className="flex flex-col gap-2">
-            {!user.isVerified && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={(e) => handleVerifyUser(user._id)}
-                disabled={verifyingUsers.has(user._id)}
-                className="text-xs"
-              >
-                {verifyingUsers.has(user._id) ? (
-                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                ) : (
-                  <Shield className="w-3 h-3 mr-1" />
-                )}
-                Approve & Send Payment Email
-              </Button>
+            {!user.isVerified && !user.finalEmailSent && (
+              <div className="flex flex-col gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={(e) => handleVerifyUser(user._id)}
+                  disabled={verifyingUsers.has(user._id)}
+                  className="text-xs"
+                >
+                  {verifyingUsers.has(user._id) ? (
+                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                  ) : (
+                    <Shield className="w-3 h-3 mr-1" />
+                  )}
+                  Approve & Send Payment Email
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={(e) => handleSendFinalEmail(user._id)}
+                  disabled={verifyingUsers.has(user._id)}
+                  className="text-xs"
+                >
+                  {verifyingUsers.has(user._id) ? (
+                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                  ) : (
+                    <Mail className="w-3 h-3 mr-1" />
+                  )}
+                  Send Final Email
+                </Button>
+              </div>
+            )}
+            {!user.isVerified && user.finalEmailSent && (
+              <Badge variant="outline" className="text-xs">
+                <Mail className="w-3 h-3 mr-1" />
+                Final Email Sent
+              </Badge>
             )}
             {user.isVerified && !user.isPaymentVerified && (
               <Button
@@ -224,6 +249,7 @@ export function UserDashboard() {
                 Complete
               </Badge>
             )}
+
           </div>
         );
       },
@@ -347,6 +373,48 @@ export function UserDashboard() {
     }
   };
 
+  const handleSendFinalEmail = async (userId: string) => {
+    // Prevent multiple clicks and race conditions
+    if (verifyingUsers.has(userId) || ongoingRequests.current.has(userId)) {
+      return;
+    }
+
+    try {
+      ongoingRequests.current.add(userId);
+      setVerifyingUsers(prev => new Set(prev).add(userId));
+
+      // Call the send final email endpoint
+      const response = await fetch("/api/admin/users/send-final-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to send final email");
+      }
+
+      const result = await response.json();
+      toast.success(`Final notification email sent to ${result.user.fullName}`);
+
+      // Refresh the users list
+      await fetchUsers();
+    } catch (error) {
+      console.error("Error sending final email:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to send final email");
+    } finally {
+      ongoingRequests.current.delete(userId);
+      setVerifyingUsers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(userId);
+        return newSet;
+      });
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -385,6 +453,12 @@ export function UserDashboard() {
           break;
         case "payment-pending":
           filtered = filtered.filter((user) => !user.isPaymentVerified);
+          break;
+        case "final-email-sent":
+          filtered = filtered.filter((user) => user.finalEmailSent);
+          break;
+        case "final-email-pending":
+          filtered = filtered.filter((user) => !user.finalEmailSent);
           break;
       }
     }
@@ -435,6 +509,7 @@ export function UserDashboard() {
       "IEEE Member ID",
       "Status",
       "Payment Status",
+      "Final Email Sent",
       "Registration Date",
     ];
 
@@ -447,6 +522,7 @@ export function UserDashboard() {
       user.ieeeMemberId || "N/A",
       user.isVerified ? "Verified" : "Pending",
       user.isPaymentVerified ? "Paid" : "Unpaid",
+      user.finalEmailSent ? "Yes" : "No",
       formatDate(user.createdAt),
     ]);
 
@@ -469,12 +545,13 @@ export function UserDashboard() {
     verified: users.filter((u) => u.isVerified).length,
     paid: users.filter((u) => u.isPaid).length,
     paymentVerified: users.filter((u) => u.isPaymentVerified).length,
+    finalEmailSent: users.filter((u) => u.finalEmailSent).length,
   };
 
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
@@ -514,6 +591,19 @@ export function UserDashboard() {
           <CardContent>
             <div className="text-2xl font-bold text-purple-600">
               {stats.paymentVerified}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Final Emails Sent
+            </CardTitle>
+            <Mail className="h-4 w-4 text-orange-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-orange-600">
+              {stats.finalEmailSent}
             </div>
           </CardContent>
         </Card>
@@ -565,6 +655,8 @@ export function UserDashboard() {
               <option value="unpaid">Unpaid Only</option>
               <option value="payment-verified">Payment Verified</option>
               <option value="payment-pending">Payment Pending</option>
+              <option value="final-email-sent">Final Email Sent</option>
+              <option value="final-email-pending">Final Email Pending</option>
             </select>
           </div>
 
