@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Use provided paymentAmount or calculate default
-        const paymentAmount = customPaymentAmount !== undefined ? parseFloat(customPaymentAmount) : (user.isIeeeCSMember ? 1700 : 2000);
+        const paymentAmount = customPaymentAmount !== undefined ? parseFloat(customPaymentAmount) : (user.isIeeeCSMember ? 1700 : 1700);
 
         // Send registration approved email with payment request
         try {

@@ -89,9 +89,9 @@ export function UserDashboard() {
       cell: ({ row }) => {
         const user = row.original;
         return (
-          <div>
-            <div className="font-medium">{user.fullName}</div>
-            <div className="text-sm text-muted-foreground">
+          <div className="space-y-1">
+            <div className="font-semibold text-gray-900">{user.fullName}</div>
+            <div className="text-sm text-gray-500">
               {user.designation}
             </div>
           </div>
@@ -104,13 +104,13 @@ export function UserDashboard() {
       cell: ({ row }) => {
         const user = row.original;
         return (
-          <div className="space-y-1">
-            <div className="flex items-center text-sm">
-              <Mail className="w-3 h-3 mr-1 text-muted-foreground" />
-              {user.email}
+          <div className="space-y-1.5">
+            <div className="flex items-center text-sm text-gray-700">
+              <Mail className="w-3 h-3 mr-2 text-gray-400" />
+              <span className="truncate">{user.email}</span>
             </div>
-            <div className="flex items-center text-sm">
-              <Phone className="w-3 h-3 mr-1 text-muted-foreground" />
+            <div className="flex items-center text-sm text-gray-600">
+              <Phone className="w-3 h-3 mr-2 text-gray-400" />
               {user.phone}
             </div>
           </div>
@@ -123,9 +123,9 @@ export function UserDashboard() {
       cell: ({ row }) => {
         const user = row.original;
         return (
-          <div className="flex items-center text-sm">
-            <Building className="w-3 h-3 mr-1 text-muted-foreground" />
-            {user.institutionCompany}
+          <div className="flex items-center text-sm text-gray-700">
+            <Building className="w-3 h-3 mr-2 text-gray-400 flex-shrink-0" />
+            <span className="truncate">{user.institutionCompany}</span>
           </div>
         );
       },
@@ -136,9 +136,11 @@ export function UserDashboard() {
       cell: ({ row }) => {
         const user = row.original;
         return user.ieeeMemberId ? (
-          <Badge variant="secondary">{user.ieeeMemberId}</Badge>
+          <Badge variant="secondary" className="text-xs font-medium">
+            {user.ieeeMemberId}
+          </Badge>
         ) : (
-          <span className="text-muted-foreground text-sm">N/A</span>
+          <span className="text-gray-400 text-sm">—</span>
         );
       },
     },
@@ -148,12 +150,29 @@ export function UserDashboard() {
       cell: ({ row }) => {
         const user = row.original;
         return (
-          <div className="space-y-1">
+          <div className="space-y-2">
             {getStatusBadge(user)}
-            <div className="text-xs text-muted-foreground">
-              {user.isVerified ? "✓ Verified" : "⏳ Pending"}
-              {user.isPaymentVerified && " • ✓ Payment Verified"}
-              {user.finalEmailSent && " • 📧 Final Email Sent"}
+            <div className="text-xs text-gray-500 space-y-0.5">
+              <div className="flex items-center gap-1">
+                {user.isVerified ? (
+                  <CheckCircle className="w-3 h-3 text-green-500" />
+                ) : (
+                  <Clock className="w-3 h-3 text-yellow-500" />
+                )}
+                <span>{user.isVerified ? "Verified" : "Pending"}</span>
+              </div>
+              {user.isPaymentVerified && (
+                <div className="flex items-center gap-1">
+                  <CreditCard className="w-3 h-3 text-green-500" />
+                  <span>Payment Verified</span>
+                </div>
+              )}
+              {user.finalEmailSent && (
+                <div className="flex items-center gap-1">
+                  <Mail className="w-3 h-3 text-orange-500" />
+                  <span>Final Email Sent</span>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -165,9 +184,9 @@ export function UserDashboard() {
       cell: ({ row }) => {
         const user = row.original;
         return (
-          <div className="flex items-center text-sm">
-            <Calendar className="w-3 h-3 mr-1 text-muted-foreground" />
-            {formatDate(user.createdAt)}
+          <div className="flex items-center text-sm text-gray-700">
+            <Calendar className="w-3 h-3 mr-2 text-gray-400 flex-shrink-0" />
+            <span>{formatDate(user.createdAt)}</span>
           </div>
         );
       },
@@ -182,12 +201,13 @@ export function UserDashboard() {
             size="sm"
             variant="outline"
             onClick={() => window.open(user.paymentScreenshotUrl, '_blank')}
-            className="text-xs"
+            className="text-xs h-7 px-2"
           >
-            View Receipt
+            <Download className="w-3 h-3 mr-1" />
+            View
           </Button>
         ) : (
-          <span className="text-muted-foreground text-xs">Not uploaded</span>
+          <span className="text-gray-400 text-xs">—</span>
         );
       },
     },
@@ -205,67 +225,67 @@ export function UserDashboard() {
                 setSelectedUser(user);
                 setDialogOpen(true);
               }}
-              className="text-xs"
+              className="text-xs h-7 px-2 w-full"
             >
               <Eye className="w-3 h-3 mr-1" />
-              View Details
+              Details
             </Button>
-            {!user.isVerified && !user.finalEmailSent && (
-              <div className="flex flex-col gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={(e) => handleVerifyUser(user._id)}
-                  disabled={verifyingUsers.has(user._id)}
-                  className="text-xs"
-                >
-                  {verifyingUsers.has(user._id) ? (
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                  ) : (
-                    <Shield className="w-3 h-3 mr-1" />
-                  )}
-                  Approve & Send Payment Email
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={(e) => handleSendFinalEmail(user._id)}
-                  disabled={verifyingUsers.has(user._id)}
-                  className="text-xs"
-                >
-                  {verifyingUsers.has(user._id) ? (
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                  ) : (
-                    <Mail className="w-3 h-3 mr-1" />
-                  )}
-                  Send Final Email
-                </Button>
-              </div>
-            )}
+                          {!user.isVerified && !user.finalEmailSent && (
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={(e) => handleVerifyUser(user._id)}
+                    disabled={verifyingUsers.has(user._id)}
+                    className="text-xs h-7 px-2"
+                  >
+                    {verifyingUsers.has(user._id) ? (
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                    ) : (
+                      <Shield className="w-3 h-3 mr-1" />
+                    )}
+                    Approve
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={(e) => handleSendFinalEmail(user._id)}
+                    disabled={verifyingUsers.has(user._id)}
+                    className="text-xs h-7 px-2"
+                  >
+                    {verifyingUsers.has(user._id) ? (
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                    ) : (
+                      <Mail className="w-3 h-3 mr-1" />
+                    )}
+                    Final Email
+                  </Button>
+                </div>
+              )}
             {!user.isVerified && user.finalEmailSent && (
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs h-7 px-2">
                 <Mail className="w-3 h-3 mr-1" />
                 Final Email Sent
               </Badge>
             )}
-            {user.isVerified && !user.isPaymentVerified && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={(e) => handleVerifyPayment(user._id)}
-                disabled={verifyingUsers.has(user._id)}
-                className="text-xs"
-              >
-                {verifyingUsers.has(user._id) ? (
-                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                ) : (
-                  <CreditCard className="w-3 h-3 mr-1" />
-                )}
-                Mark Payment as Verified
-              </Button>
-            )}
+                          {user.isVerified && !user.isPaymentVerified && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={(e) => handleVerifyPayment(user._id)}
+                  disabled={verifyingUsers.has(user._id)}
+                  className="text-xs h-7 px-2"
+                >
+                  {verifyingUsers.has(user._id) ? (
+                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                  ) : (
+                    <CreditCard className="w-3 h-3 mr-1" />
+                  )}
+                  Verify Payment
+                </Button>
+              )}
             {user.isVerified && user.isPaymentVerified && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-xs h-7 px-2">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Complete
               </Badge>
@@ -656,18 +676,18 @@ export function UserDashboard() {
           {/* Search and Filter */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Search by name, email, phone, or institution..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 border border-input rounded-md bg-background text-sm"
+              className="px-3 py-2 border border-gray-200 rounded-md bg-white text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
             >
               <option value="all">All Users</option>
               <option value="verified">Verified Only</option>
@@ -682,13 +702,13 @@ export function UserDashboard() {
           </div>
 
           {/* Table */}
-          <div className="rounded-md border">
+          <div className="rounded-lg border bg-white shadow-sm">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
+                  <TableRow key={headerGroup.id} className="bg-gray-50/50 hover:bg-gray-50/70">
                     {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
+                      <TableHead key={header.id} className="font-semibold text-gray-700 py-4">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -703,21 +723,24 @@ export function UserDashboard() {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
+                    <TableCell colSpan={7} className="text-center py-12">
                       <div className="flex items-center justify-center">
-                        <RefreshCw className="w-4 h-4 animate-spin mr-2" />
-                        Loading users...
+                        <RefreshCw className="w-5 h-5 animate-spin mr-3 text-gray-500" />
+                        <span className="text-gray-600">Loading users...</span>
                       </div>
                     </TableCell>
                   </TableRow>
                 ) : table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
+                  table.getRowModel().rows.map((row, index) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
+                      className={`border-b border-gray-100 hover:bg-gray-50/50 transition-colors ${
+                        index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
+                      }`}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
+                        <TableCell key={cell.id} className="py-4">
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
                       ))}
@@ -725,8 +748,11 @@ export function UserDashboard() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      No users found
+                    <TableCell colSpan={7} className="text-center py-12">
+                      <div className="flex flex-col items-center justify-center text-gray-500">
+                        <Users className="w-8 h-8 mb-2 opacity-50" />
+                        <span>No users found</span>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )}
