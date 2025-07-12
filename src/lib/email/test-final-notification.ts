@@ -19,12 +19,12 @@ async function testFinalNotificationTemplate() {
     console.log('Template length:', htmlContentVerified.length);
     console.log('Status in template:', testDataVerified.registrationData.status);
 
-    // Test for unverified user (registration pending)
+    // Test for unverified user (confirmed)
     const testDataUnverified = {
       userName: 'Jane Smith',
       registrationData: {
         id: 'TEST456',
-        status: 'Registration Pending',
+        status: 'Confirmed',
         registrationDate: new Date().toISOString()
       }
     };

@@ -18,7 +18,7 @@ export function finalNotificationTemplate(data: {
       <h3>Registration Details</h3>
       <p><strong>Registration ID:</strong> ${data.registrationData.id || "N/A"}</p>
       <p><strong>Registration Date:</strong> ${new Date().toLocaleDateString()}</p>
-      <p><strong>Current Status:</strong> <span style="color: #ff6b35; font-weight: bold;">${data.registrationData.status || "Registration Pending"}</span></p>
+      <p><strong>Current Status:</strong> <span style="color: #ff6b35; font-weight: bold;">${data.registrationData.status || "Confirmed"}</span></p>
     </div>
     
     <div class="highlight">

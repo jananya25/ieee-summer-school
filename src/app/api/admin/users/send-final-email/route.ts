@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         try {
             await queueFinalNotification(user.email, user.fullName, {
                 id: user._id,
-                status: user.isVerified ? 'Payment Pending' : 'Registration Pending',
+                status: user.isVerified ? 'Payment Pending' : 'Confirmed',
                 registrationDate: user.createdAt
             });
 
