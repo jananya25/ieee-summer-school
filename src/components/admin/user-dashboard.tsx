@@ -32,6 +32,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { UserDetailsDialog } from "./user-details-dialog";
 
 import {
   flexRender,
@@ -61,6 +62,12 @@ type User = {
   paymentScreenshotUrl?: string;
   finalEmailSent?: boolean;
   finalEmailSentAt?: Date;
+  gender?: string;
+  cvUrl?: string;
+  ieeeIdCardUrl?: string;
+  isIeeeCSMember?: boolean;
+  paymentRequestSent?: boolean;
+  paymentRequestSentAt?: Date;
 }
 
 export function UserDashboard() {
@@ -73,6 +80,8 @@ export function UserDashboard() {
   const ongoingRequests = useRef<Set<string>>(new Set());
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const defaultColumns: ColumnDef<User>[] = [
     {
       header: "User",
@@ -189,6 +198,18 @@ export function UserDashboard() {
         const user = row.original;
         return (
           <div className="flex flex-col gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                setSelectedUser(user);
+                setDialogOpen(true);
+              }}
+              className="text-xs"
+            >
+              <Eye className="w-3 h-3 mr-1" />
+              View Details
+            </Button>
             {!user.isVerified && !user.finalEmailSent && (
               <div className="flex flex-col gap-2">
                 <Button
@@ -739,6 +760,17 @@ export function UserDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* User Details Dialog */}
+      <UserDetailsDialog
+        user={selectedUser}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onVerifyUser={handleVerifyUser}
+        onVerifyPayment={handleVerifyPayment}
+        onSendFinalEmail={handleSendFinalEmail}
+        isProcessing={verifyingUsers.size > 0}
+      />
     </div>
   );
 } 
