@@ -3,6 +3,7 @@ import { registrationApprovedTemplate } from './templates/registration-approved'
 import { passwordResetTemplate } from './templates/password-reset';
 import { paymentConfirmationTemplate } from './templates/payment-confirmation';
 import { adminNotificationTemplate } from './templates/admin-notification';
+import { finalNotificationTemplate } from './templates/final-notification';
 
 // Template mapping
 const templates: Record<string, (data: any) => string> = {
@@ -11,6 +12,7 @@ const templates: Record<string, (data: any) => string> = {
   'password-reset': passwordResetTemplate,
   'payment-confirmation': paymentConfirmationTemplate,
   'admin-notification': adminNotificationTemplate,
+  'final-notification': finalNotificationTemplate,
 };
 
 // Main template renderer
