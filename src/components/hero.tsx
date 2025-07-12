@@ -95,6 +95,11 @@ export default function HeroSection() {
                   alt="BVICAM SB"
                   className="h-12 w-32 object-fit"
                 />
+                <img
+                  src="/ieecs.png"
+                  alt="ieee cs"
+                  className="h-12 w-32 object-fit"
+                />
               </div>
           </div>
         </motion.div>
