@@ -22,7 +22,7 @@ const Speakers = () => {
     },
     {
       title: "Mr. Ajay Ramani",
-      src: "/ajayramani.jpg",
+      src: "/ajay.jpg",
       designation: "Software Engineer, Lyxel & Flamingo, Gurugram"
     },
     {
