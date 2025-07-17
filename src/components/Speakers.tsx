@@ -40,6 +40,11 @@ const Speakers = () => {
       src: "/per.jpg",
       designation: "Professor at Sasi Institute of Technology & Engineering"
     },
+    {
+      title: "Dr. Anup Girdhar",
+      src: "/anup.jpeg",
+      designation: "CEO, Sedulity Solutions & Technologies"
+    },
   ];
 
   
