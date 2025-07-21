@@ -144,6 +144,7 @@ export default function RegistrationGuidelines() {
             <ul className="text-muted-foreground list-inside list-disc space-y-2">
               <li className="text-red-500">
                Last Date of Registration: 16th July 2025
+               <span className="text-red-500 font-bold px-4">*Registrations closed*</span>
               </li>
               <li>
                 Workshop seats will be allocated on a first-come, first-served
