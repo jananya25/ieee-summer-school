@@ -1,0 +1,69 @@
+2025-07-25T07:50:58.676Z [info]: Queued 'registrations closed' email for loveharshi005@gmail.com (Harshita Singh)
+2025-07-25T07:50:58.749Z [info]: Queued 'registrations closed' email for bhatiapurab27@gmail.com (Purab Bhatia)
+2025-07-25T07:51:00.722Z [info]: Queued 'registrations closed' email for Shivamvns9454@gmail.com (Shivam Singh)
+2025-07-25T07:51:00.868Z [info]: Queued 'registrations closed' email for aadityaakshat304@gmail.com (Aaditya)
+2025-07-25T07:51:00.901Z [info]: Queued 'registrations closed' email for avinash1139.be23@chitkarauniversity.edu.in (Avinash Jakhar)
+2025-07-25T07:51:00.931Z [info]: Queued 'registrations closed' email for anmol183.be23@chitkarauniversity.ed.in (Anmol Sharma)
+2025-07-25T07:51:00.964Z [info]: Queued 'registrations closed' email for anmol1083.be23@chitkarauniversity.edu.in (Avinash Jakhar)
+2025-07-25T07:51:01.705Z [info]: Queued 'registrations closed' email for vigneshwer06@gmail.com (Vigneshwer Shivpuri)
+2025-07-25T07:51:01.930Z [info]: Queued 'registrations closed' email for kumaramrendram.mca24@bvicam.in (test)
+2025-07-25T07:51:01.972Z [info]: Queued 'registrations closed' email for yuktiagrawal170506@gmail.com (Yukti Agrawal)
+2025-07-25T07:51:02.037Z [info]: Queued 'registrations closed' email for shagun09819@gmail.com (Shagun)
+2025-07-25T07:51:02.071Z [info]: Queued 'registrations closed' email for nirthehydrobeast50@gmail.com (nirmaan vashisht)
+
+
+
+{
+"message": "Queued 'registrations closed' email for 12 users.",
+"errors": [],
+"recipients": [
+{
+"email": "loveharshi005@gmail.com",
+"fullName": "Harshita Singh"
+},
+{
+"email": "bhatiapurab27@gmail.com",
+"fullName": "Purab Bhatia"
+},
+{
+"email": "Shivamvns9454@gmail.com",
+"fullName": "Shivam Singh"
+},
+{
+"email": "aadityaakshat304@gmail.com",
+"fullName": "Aaditya"
+},
+{
+"email": "avinash1139.be23@chitkarauniversity.edu.in",
+"fullName": "Avinash Jakhar"
+},
+{
+"email": "anmol183.be23@chitkarauniversity.ed.in",
+"fullName": "Anmol Sharma"
+},
+{
+"email": "anmol1083.be23@chitkarauniversity.edu.in",
+"fullName": "Avinash Jakhar"
+},
+{
+"email": "vigneshwer06@gmail.com",
+"fullName": "Vigneshwer Shivpuri"
+},
+{
+"email": "kumaramrendram.mca24@bvicam.in",
+"fullName": "test"
+},
+{
+"email": "yuktiagrawal170506@gmail.com",
+"fullName": "Yukti Agrawal"
+},
+{
+"email": "shagun09819@gmail.com",
+"fullName": "Shagun"
+},
+{
+"email": "nirthehydrobeast50@gmail.com",
+"fullName": "nirmaan vashisht"
+}
+]
+}

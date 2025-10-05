@@ -160,10 +160,10 @@ export default function RegisterPage() {
               </h1>
             </div>
 
-            <RegistrationsClosed />
+            {/*<RegistrationsClosed />*/}
 
             {/* Only show the form if registrations are open (currently closed) */}
-            {/*
+            
             <form 
               onSubmit={handleSubmit(onSubmit, (formErrors) => {
                 // Find the first error message
@@ -183,10 +183,10 @@ export default function RegisterPage() {
             >
               ...
             </form>
-            */}
+            
 
             {/* Navigation buttons */}
-            {/* <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 pt-8 mt-8 border-t border-neutral-200 dark:border-neutral-800">
+               <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 pt-8 mt-8 border-t border-neutral-200 dark:border-neutral-800">
               {step > 0 ? (
                 <Button
                   type="button"
@@ -223,7 +223,7 @@ export default function RegisterPage() {
                   <span>{isSubmitting ? 'Submitting...' : 'Complete Registration'}</span>
                 </Button>
               )}
-            </div> */}
+            </div> 
           </div>
         </div>
       </div>

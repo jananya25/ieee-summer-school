@@ -84,6 +84,7 @@ export async function GET() {
         'password-reset',
         'payment-confirmation',
         'admin-notification',
+        'registrations-closed',
       ],
     });
   } catch (error) {

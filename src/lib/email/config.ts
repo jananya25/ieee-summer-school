@@ -32,6 +32,7 @@ export const emailConfig = {
     passwordReset: 'password-reset',
     paymentConfirmation: 'payment-confirmation',
     adminNotification: 'admin-notification',
+    registrationsClosed: 'registrations-closed',
   },
 
   // URLs

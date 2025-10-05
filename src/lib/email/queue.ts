@@ -1,4 +1,5 @@
 import { sendEmail, EmailOptions } from '../email';
+import winston from 'winston';
 
 interface QueuedEmail extends EmailOptions {
   id: string;
@@ -120,6 +121,18 @@ class EmailQueue {
     return `email_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
+
+// Winston logger setup
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => `${timestamp} [${level}]: ${message}`)
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'app.log' })
+  ],
+});
 
 // Create singleton instance
 const emailQueue = new EmailQueue();
@@ -249,6 +262,19 @@ async function queueFinalNotification(
   }, 'normal');
 }
 
+async function queueRegistrationsClosed(
+  userEmail: string,
+  userName: string
+): Promise<string> {
+  logger.info(`Queued 'registrations closed' email for ${userEmail} (${userName})`);
+  return emailQueue.addToQueue({
+    to: userEmail,
+    subject: 'Registrations Closed - R10 IEEE Computer Society Summer School 2025',
+    template: 'registrations-closed',
+    data: { userName },
+  }, 'normal');
+}
+
 // Export queue status function
 export function getQueueStatus() {
   return emailQueue.getQueueStatus();
@@ -261,5 +287,6 @@ export {
   queuePasswordReset, 
   queuePaymentConfirmation, 
   queueAdminNotification,
-  queueFinalNotification
+  queueFinalNotification,
+  queueRegistrationsClosed
 };
